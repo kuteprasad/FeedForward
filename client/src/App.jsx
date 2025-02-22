@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import useWebSocket from "./useWebsocket";
 
 // Component imports
 import Login from "./components/auth/Login.jsx";
