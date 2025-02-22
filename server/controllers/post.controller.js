@@ -1,5 +1,6 @@
 
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js";
 import {io} from "../index.js"
 import { getNearestLocations } from "../services/locationService.js";
 import { addNotification } from "../services/notificationService.js";
@@ -124,3 +125,43 @@ export const getpost = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
     }
 }
+
+
+export const sendRequest = async (req, res) => {
+    const { reqId, postId } = req.body; 
+
+    try {
+        
+        const response = await Order.findOneAndUpdate(
+            { _id: postId }, // Filter by postId (ensure it's a valid ID)
+            { $addToSet: { requestedBy: reqId } }, // Push reqId into the requestedBy array
+            { new: true } // Return the updated document
+        );
+
+        if (!response) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+        const requester= await User.findById(reqId).exec();
+        const  notifi={
+            "type": "NEWPOST",
+            "from": "60b8d6e6f92a4e1d8b6a3c47",
+            "to": response.donorId,
+            "message": "request for food!",
+            "requester":requester,
+            "isRead": false
+          }
+        const data = await addNotification(notifi);
+        io.emit("notification", JSON.stringify({
+            from: "system",
+            to: [response.donorId],
+            message: `request for food!`
+        }));
+
+        
+
+        return res.status(200).json({ success: true, message: 'Request added successfully', data: response });
+    } catch (error) {
+        console.error('Error in sendRequest:', error);
+        return res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+    }
+};
