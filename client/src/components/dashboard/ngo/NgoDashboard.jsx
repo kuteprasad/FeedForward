@@ -63,7 +63,7 @@ export default function NgoDashboard() {
             </div>
 
             <p className="text-sm text-[var(--text-secondary)] mb-4">
-              📍 {donation.location.address}
+              📍 {donation?.location?.address}
             </p>
 
             {donation.status === "ACCEPTED" && donation.ngoId === user.id ? (

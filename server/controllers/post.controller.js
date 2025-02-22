@@ -6,58 +6,91 @@ import { addNotification } from "../services/notificationService.js";
 import mongoose from "mongoose";
 
 async function createPost(postData) {
-  // console.log();
-  console.log("📦 Creating post");
+  console.log("📦 Creating post with data:", postData);
   try {
+    // Validate required fields
+    if (!postData.donorId || !postData.location) {
+      throw new Error("Missing required fields: donorId or location");
+    }
+
+    // Create and save new post
     const newPost = new Order(postData);
     await newPost.save();
+    console.log("✅ Post saved with ID:", newPost._id);
 
-    console.log("✅ Post created successfully:");
+    // Get nearby NGOs
+    const radius = 20000; // 20km radius
+    
     const locations = await getNearestLocations(
       postData.location.longitude,
       postData.location.latitude,
-      20000
+      radius
     );
+    console.log(`Found ${locations.length} NGOs within ${radius}m radius`);
 
-    // console.log(locations);
+    // Process each NGO
     let ngos = [];
-    for (let i in locations) {
-      const ids = locations[i]["_id"];
-      const data= await User.findByIdAndUpdate(ids,{
-          $addToSet:{
-            requestRecieved:ids
-        }
-      },{
-        new:true
-      });
-      ngos.push(ids);
+    const notificationPromises = [];
+
+    for (const location of locations) {
+      const ngoId = location._id;
+
+      // Add post to NGO's requestReceived array
+      const updatePromise = User.findByIdAndUpdate(
+        ngoId,
+        {
+          $addToSet: {
+            requestReceived: newPost._id, // Fix: was using ngoId instead of post._id
+          },
+        },
+        { new: true }
+      );
+
+      // Create notification
       const notifi = {
         type: "NEWPOST",
-        from: "60b8d6e6f92a4e1d8b6a3c47",
-        to: ids,
+        from: postData.donorId, // Fix: was using hardcoded ID
+        to: ngoId,
         postId: newPost._id,
-        message: "Post is created by donor in your area",
+        message: "New donation available in your area",
         isRead: false,
       };
-      //   console.log("notification", notifi);
-      
-      
-      const response = await addNotification(notifi);
+
+      notificationPromises.push(updatePromise, addNotification(notifi));
+      ngos.push(ngoId);
     }
 
+    // Wait for all updates and notifications
+    await Promise.all(notificationPromises);
+
+    // Send websocket notification
     io.emit(
       "notification",
       JSON.stringify({
-        from: newPost.donorId,
+        from: postData.donorId,
         to: ngos,
         postId: newPost._id,
-        message: `Post is created by donor in your area`,
+        message: "New donation available in your area",
+        type: "NEWPOST",
       })
     );
-    const updatedpost = await Order.updateOne({_id:newPost._id},{$set:{notificationSent=ngos}})
-    return updatedpost.toObject();
+
+    // Update post with notified NGOs
+    const updatedPost = await Order.findByIdAndUpdate(
+      newPost._id,
+      {
+        $set: {
+          notificationSent: ngos,
+          status: "PENDING", // Add initial status
+        },
+      },
+      { new: true }
+    );
+
+    console.log("✅ Post creation completed:", updatedPost._id);
+    return updatedPost;
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error("❌ Error in createPost:", error);
     throw error;
   }
 }
