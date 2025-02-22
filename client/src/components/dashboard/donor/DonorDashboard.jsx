@@ -5,7 +5,9 @@ import { Label } from "../../basic/Label";
 import { FormInput } from "../../basic/FormInput";
 import { Toggle } from "../../basic/Toggle";
 import { FileInput } from "../../basic/FileInput";
-import { useDonationForm } from "./donorHook.js";
+import { useDonationForm } from "./donorHook.js"
+import { useSelector } from "react-redux";
+
 
 export default function DonorDashboard() {
   const {
@@ -20,6 +22,12 @@ export default function DonorDashboard() {
     handleGetLocation,
     handleSubmit,
   } = useDonationForm();
+
+  const { notifications, isConnected } = useSelector(
+    (state) => state.websocket
+  );
+  console.log(notifications);
+  
 
   const [newItem, setNewItem] = useState({});
 

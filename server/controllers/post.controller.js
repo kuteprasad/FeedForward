@@ -158,28 +158,33 @@ export const getpost = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "ngoId",
+          foreignField: "_id",
+          as: "ngo",
+        },
+      },
+      {
         $project: {
           postId: "$_id",
+          donorId: 1,
           donorName: { $arrayElemAt: ["$donor.username", 0] },
-          foodItems: {
-            $map: {
-              input: "$foodItems",
-              as: "item",
-              in: {
-                name: "$$item.name",
-                quantity: "$$item.quantity",
-                quantityType: "$$item.quantityType",
-                expiryDate: "$$item.expiryDate",
-              },
-            },
-          },
-          location: {
-            address: "$location.address",
-            latitude: "$location.latitude",
-            longitude: "$location.longitude",
-          },
-          requestedBy: 1,
+          ngoId: 1,
           status: 1,
+          requestedBy: 1,
+          trackStatus: 1,
+          deliveryBy: 1,
+          deliveredAt: 1,
+          deliveredPerson: 1,
+          locationDonor: 1,
+          locationNgo: 1,
+          foodItems: 1,
+          feedback: 1,
+          rating: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          __v: 1,
         },
       },
     ]);
@@ -228,7 +233,8 @@ console.log("sendRequest received");
       type: "NEWPOST",
       from: reqId,
       to: response.donorId,
-      message: "request for food!",
+      postId:postId,
+      message: `request for food by ${reqId}`,
       requester: requester,
       isRead: false,
     };
@@ -238,7 +244,9 @@ console.log("sendRequest received");
       JSON.stringify({
         from: "system",
         to: [response.donorId],
-        message: `request for food!`,
+        reqId:reqId,
+        updated:true,
+        message: `request for food by ${reqId}`,
       })
     );
 
