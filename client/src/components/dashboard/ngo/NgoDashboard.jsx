@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import useWebSocket from "../../../services/useWebsocket";
+import { useSelector } from "react-redux";
+
 import { Button } from "../../basic/Button";
 
 export default function NgoDashboard() {
   const [donations, setDonations] = useState([]);
-  const notifications = useWebSocket();
+
+  const { notifications, isConnected, error } = useSelector((state) => state.websocket);
 
   // Mock data structure for a donation
   const dummyDonation = {
@@ -26,7 +28,8 @@ export default function NgoDashboard() {
 
   useEffect(() => {
     if (notifications.length > 0) {
-        console.log("notif : ",notifications);
+      console.log("notif : ", notifications);
+      console.log("posti", notifications[0].postId);
       // Add new donation to the list
       setDonations((prev) => [...prev, dummyDonation]);
     }
