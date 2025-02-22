@@ -266,3 +266,98 @@ console.log("sendRequest successfull");
     });
   }
 };
+
+
+export const getDonations = async (req, res) => {
+  const { donorId } = req.params;
+
+  try {
+    const donations = await Order.find({ donorId: donorId }).populate(
+      "donorId",
+      "username"
+    );
+
+    if (!donations || donations.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No donations found for this donor" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Donations retrieved successfully",
+      data: donations,
+    });
+  } catch (error) {
+    console.error("Error in getDonations:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const acceptRequest = async (req,res)=>{
+  const postData = req.body;
+  console.log(postData);
+  try {
+    const existing = await Order.findOne({ _id: postData.postId }).exec();
+    console.log(existing);
+    if (existing) {
+      try {
+        const updatedPost = await Order.updateOne(
+          { _id: postData.postId },
+          { $set: postData }
+        ).exec();
+        console.log("updated post is ", updatedPost);
+        const notifi = {
+          type: "NEWPOST",
+          from: "60b8d6e6f92a4e1d8b6a3c47",
+          to: postData.ngoId,
+          message: "You received new donation!",
+          isRead: false,
+        };
+        const response = await addNotification(notifi);
+        io.emit(
+          "notification",
+          JSON.stringify({
+            from: newPost.donorId,
+            to: [postData.ngoId],
+            message: `You received new donation!`,
+          })
+        );
+        if (response) {
+          console.log("notification added");
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: "Post updated successfully",
+          data: updatedPost,
+        });
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update post",
+          error: error.message,
+        });
+      }
+    } else {
+      return res
+        .status(500)
+        .json({ success: false, message: "Post does not exist" });
+    }
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+}
+
+export const updatestatus = async (req,res)=>{
+  
+}
