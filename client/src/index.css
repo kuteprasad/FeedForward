@@ -1,0 +1,64 @@
+/* ========================= */
+/* 🌟 Global Theme Variables */
+/* ========================= */
+@import "tailwindcss";
+
+/* Light Theme (default) */
+:root {
+  /* Core colors */
+  --primary: #1a73e8;
+  --background: #ffffff;
+  --text: #1f2937;
+  --border: #e5e7eb;
+  --accent: #f3f4f6;
+
+  /* Component colors */
+  --navbar-bg: #ffffff;
+  --navbar-text: #1f2937;
+  
+  /* Form elements */
+  --input-bg: #ffffff;
+  --input-text: #1f2937;
+  --input-border: #d1d5db;
+  --input-focus: #1a73e8;
+
+  /* Buttons */
+  --btn-primary-bg: #1a73e8;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #1557b0;
+  
+  --btn-secondary-bg: #f3f4f6;
+  --btn-secondary-text: #1f2937;
+  --btn-secondary-hover: #e5e7eb;
+}
+
+/* Dark Theme */
+[data-theme='dark'] {
+  /* Core colors */
+  --primary: #60a5fa;
+  --background: #1f2937;
+  --text: #f3f4f6;
+  --border: #374151;
+  --accent: #374151;
+
+  /* Component colors */
+  --navbar-bg: #111827;
+  --navbar-text: #f3f4f6;
+
+  /* Form elements */
+  --input-bg: #374151;
+  --input-text: #f3f4f6;
+  --input-border: #4b5563;
+  --input-focus: #60a5fa;
+
+  /* Buttons */
+  --btn-primary-bg: #60a5fa;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #3b82f6;
+
+  --btn-secondary-bg: #374151;
+  --btn-secondary-text: #f3f4f6;
+  --btn-secondary-hover: #4b5563;
+}
+
+

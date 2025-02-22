@@ -1,0 +1,112 @@
+# Ignore Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# But allow
+!.env.example
+
+# Ignore build files
+/build
+/dist
+/.next
+/.vercel
+/.turbo
+/.expo
+
+# Ignore logs and temp files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore editor/IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Ignore MongoDB database files
+data/db/
+dump/
+
+# Ignore FastAPI dependencies
+__pycache__/
+*.py[cod]
+*.sqlite3
+venv/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore virtual environment (Python)
+.venv/
+env/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore FastAPI cache files
+*.pytest_cache/
+.cache/
+.mypy_cache/
+
+# Ignore React & React Native dependencies
+frontend/node_modules/
+frontend/build/
+frontend/.next/
+
+mobile/node_modules/
+mobile/android/app/build/
+mobile/ios/Pods/
+mobile/ios/build/
+
+# Ignore Expo & Metro Bundler files (React Native)
+.expo/
+.expo-shared/
+metro.config.js
+babel.config.js
+packager-cache/
+index.bundle
+
+# Ignore Android & iOS build files (React Native)
+android/.gradle/
+android/.idea/
+android/app/build/
+android/app/release/
+android/build/
+android/gradle.properties
+android/local.properties
+ios/Pods/
+ios/build/
+ios/DerivedData/
+ios/.vscode/
+
+# Ignore Xcode specific files
+ios/*.xcworkspace
+ios/*.xcuserstate
+ios/*.xcuserdata
+
+# Ignore sensitive files
+firebase.json
+google-services.json
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Ignore Docker files (if used)
+docker-compose.override.yml
+.dockerignore
