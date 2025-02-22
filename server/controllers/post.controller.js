@@ -105,3 +105,22 @@ export const update = async (req,res)=>{
         return res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
     }
 }
+
+
+export const getpost = async (req, res) => {
+    const { id } = req.query;
+    console.log(id);
+    
+    try {
+        const data = await Order.findById(id).exec();
+        if (data) {
+            return res.status(200).json({ success: true, message: 'Post found successfully', data: data });
+        } else {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+        
+    } catch (error) {
+        console.log("Error in postController: ", error);
+        return res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+    }
+}
