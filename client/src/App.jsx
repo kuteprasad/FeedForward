@@ -1,9 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useWebSocket from "./useWebsocket";
@@ -40,85 +35,81 @@ function App() {
   };
 
   return (
-    
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated() ? (
+              <Navigate to={`/${getStoredUserRole()}`} replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
 
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                isAuthenticated() ? (
-                  <Navigate to={`/${getStoredUserRole()}`} replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
-              }
-            />
+        <Route path="/" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
 
-            <Route path="/" element={<AuthLayout />}>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-            </Route>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          {/* <Route path="profile" element={<Profile />} /> */}
+        </Route>
 
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute allowedRole="admin">
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<AdminDashboard/>} />
-              {/* <Route path="profile" element={<Profile />} /> */}
-            </Route>
-
-            <Route
-              path="/donor"
-              element={
-                <ProtectedRoute allowedRole="donor">
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<DonorDashboard />} />
-              {/* <Route path="profile" element={<Profile />} />
+        <Route
+          path="/donor"
+          element={
+            <ProtectedRoute allowedRole="donor">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DonorDashboard />} />
+          {/* <Route path="profile" element={<Profile />} />
               <Route path="history" element={<DonorHistory />} />
               <Route path="notifications" element={<DonorNotifications />} />
               <Route path="postings" element={<DonorPostings />} /> */}
-            </Route>
+        </Route>
 
-            <Route
-              path="/ngo"
-              element={
-                <ProtectedRoute allowedRole="ngo">
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<NgoDashboard />} />
-              {/* <Route path="profile" element={<Profile />} />
+        <Route
+          path="/ngo"
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<NgoDashboard />} />
+          {/* <Route path="profile" element={<Profile />} />
               <Route path="history" element={<NgoHistory />} />
               <Route path="notifications" element={<NgoNotifications />} />
               <Route path="requests" element={<NgoRequests />} /> */}
-            </Route>
+        </Route>
 
-            <Route path="/notifications" element={<Notifications />} />
+        <Route path="/notifications" element={<Notifications />} />
 
-            <Route path="/common" element={<Dashboard />}>
-              {/* Common routes for all users */}
-              {/* <Route path="about" element={<About />} />
+        <Route path="/common" element={<Dashboard />}>
+          {/* Common routes for all users */}
+          {/* <Route path="about" element={<About />} />
               <Route path="contact-us" element={<ContactUs />} />
               <Route path="donorsList" element={<Donors />} />
               <Route path="ngosList" element={<Ngos />} />
               <Route path="recent-activities" element={<RecentActivities />} /> */}
-            </Route>
-            <Route path="/error" element={<Error />} />
-            <Route path="*" element={<Error status={404} />} />
-          </Routes>
-          <Toaster position="top-right" />
-        </BrowserRouter>
-
-
+        </Route>
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Error status={404} />} />
+      </Routes>
+      <Toaster position="top-right" />
+    </BrowserRouter>
   );
 }
 

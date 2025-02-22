@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {user} = useSelector((state) => state.auth);
 
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
                 // Hardcoded user ID for testing
-                const uid = '67b22e824ded6fbdeccd115f';
-                console.log(uid);
+                console.log("user", user);
+                // console.log("user id", user.id);
+                // const uid = '67b22e824ded6fbdeccd115f';
+                // console.log(uid);
 
                 // POST request to fetch notifications
-                const response = await axios.post(`${import.meta.env.VITE_API_URL}/notifications/all`, { id: uid });
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/notifications/all`, { id: user.id });
 
                 // Extract data from response and store in state
                 setNotifications(response.data.data); // Accessing the correct 'data' array in the response
