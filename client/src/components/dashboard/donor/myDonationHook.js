@@ -48,11 +48,14 @@ export const useMyDonations = () => {
 
   const handleAcceptRequest = async (postId, ngoId) => {
     try {
+    console.log("handle accept request called   ");
       const response = await donorService.updatePostStatus(
         postId,
         ngoId,
         "ACCEPT"
       );
+      console.log("response of handle accept: ", response);
+      
       if (response.success) {
         toast.success("Request accepted successfully");
         setDonations((prev) =>
