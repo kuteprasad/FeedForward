@@ -2,30 +2,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/authSlice";
 import { toggleTheme } from "../../store/slices/themeSlice";
-import { setLanguage } from "../../store/slices/langSlice";
-import { useTranslation } from "react-i18next";
+import GTranslate from "../common/GTranslate";
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { token, user } = useSelector((state) => state.auth);
   const { mode } = useSelector((state) => state.theme);
-  const { current: currentLang } = useSelector((state) => state.lang);
 
   const navigation = user
     ? [
-        { name: t("dashboard"), href: "/dashboard" },
-        { name: t("orders"), href: "/orders" },
-        { name: t("profile"), href: "/profile" },
+        { name: "Dashboard", href: "/dashboard" },
+        { name: "Orders", href: "/orders" },
+        { name: "Profile", href: "/profile" },
       ]
     : [];
-
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "hi", name: "हिंदी" },
-    { code: "mr", name: "मराठी" },
-  ];
 
   return (
     <nav className="bg-[var(--navbar-bg)] shadow-md fixed top-0 left-0 w-full z-50">
@@ -54,19 +45,8 @@ export default function Navbar() {
 
           {/* Right Side Items */}
           <div className="flex items-center space-x-4">
-            {/* Language Selector */}
-            <select
-              value={currentLang}
-              onChange={(e) => dispatch(setLanguage(e.target.value))}
-              className="p-2 rounded-lg bg-[var(--btn-secondary-bg)] 
-                       text-[var(--btn-secondary-text)] border-none outline-none"
-            >
-              {languages.map((lang) => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.name}
-                </option>
-              ))}
-            </select>
+            {/* Google Translate Button */}
+            <GTranslate />
 
             {/* Theme Toggle */}
             <button
@@ -92,7 +72,7 @@ export default function Navbar() {
                   className="bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] 
                            px-4 py-2 rounded-lg hover:bg-[var(--btn-primary-hover)]"
                 >
-                  {t("logout")}
+                  Logout
                 </button>
               </div>
             ) : (
@@ -102,14 +82,14 @@ export default function Navbar() {
                   className="bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] 
                            px-4 py-2 rounded-lg hover:bg-[var(--btn-primary-hover)]"
                 >
-                  {t("login")}
+                  Login
                 </Link>
                 <Link
                   to="/register"
                   className="bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] 
                            px-4 py-2 rounded-lg hover:bg-[var(--btn-primary-hover)]"
                 >
-                  {t("register")}
+                  Register
                 </Link>
               </div>
             )}
