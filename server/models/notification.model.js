@@ -24,6 +24,11 @@ const NotificationSchema = new mongoose.Schema(
       ref: 'User', // Reference to the User model for the recipient
       required: true,
     },
+    postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order', // Reference to the User model for the recipient
+      required: false,
+    },
     message: {
       type: String,
       required: true, // The message for both types
