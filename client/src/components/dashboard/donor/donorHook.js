@@ -5,18 +5,20 @@ import { profileService } from "../../../services/profile.service";
 import { useSelector } from "react-redux";
 
 export const useDonationForm = () => {
-  const { user } = useSelector((state) => state.auth);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    donorId: user?.id,
-    foodItems: [],
-    deliveryBy: "SELF",
-    location: {
-      address: "",
-      latitude: 0,
-      longitude: 0,
-    },
-  });
+ const { user } = useSelector((state) => state.auth);
+
+ const [formData, setFormData] = useState({
+   donorId: "", // Start with empty string
+   foodItems: [],
+   deliveryBy: "SELF",
+   location: {
+     address: "",
+     latitude: 0,
+     longitude: 0,
+   },
+ });
 
   const handleAddFoodItem = (item) => {
     setFormData((prev) => ({
@@ -63,8 +65,16 @@ export const useDonationForm = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("formData", formData);
-      const response = await donorService.createPost(formData);
+      if (!user?.id) {
+        toast.error("User ID not available");
+        return;
+      }
+
+      const dataToSubmit = {
+        ...formData,
+        donorId: user.id, // Set donorId here instead
+      };
+      const response = await donorService.createPost(dataToSubmit);
       console.log("response", response);
       if (response.status === 200) {
         setFormData({

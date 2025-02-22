@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import useWebSocket from "./useWebsocket";
+import { websocketService } from "./services/websocket.service";
 
 // Component imports
 import Login from "./components/auth/Login.jsx";
@@ -42,6 +42,17 @@ function App() {
   const isAuthenticated = () => {
     return token !== null && token !== undefined && token !== "";
   };
+
+  useEffect(() => {
+    // Initialize WebSocket connection when authenticated
+    if (isAuthenticated()) {
+      websocketService.connect();
+    }
+
+    return () => {
+      websocketService.disconnect();
+    };
+  }, [token]);
 
   return (
     <BrowserRouter>

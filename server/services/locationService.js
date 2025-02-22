@@ -13,6 +13,7 @@ export async function getNearestLocations(longitude, latitude, distance) {
                 }
             }
         }).limit(5); // You can adjust the limit as needed
+        console.log("✅ Found nearest locations:", locations);
         return locations;
     } catch (err) {
         console.log("Error in finding locations", err);
