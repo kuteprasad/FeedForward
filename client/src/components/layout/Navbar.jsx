@@ -22,13 +22,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold text-[var(--navbar-text)]">
-              InnovateYou
+              FeedForward
             </span>
           </Link>
 
           {/* Navigation Links - Hidden on Mobile */}
           <div className="hidden md:flex space-x-6">
-            {navigation.map((item) => (
+            {getNavigation().map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -38,6 +38,16 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
+            {/* Common link for all authenticated users */}
+            {user && (
+              <Link
+                to="/profile"
+                className="text-[var(--navbar-text)] hover:text-[var(--primary)] 
+                         transition duration-300 text-sm font-medium"
+              >
+                Profile
+              </Link>
+            )}
           </div>
 
           {/* Right Side Items */}

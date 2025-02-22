@@ -1,5 +1,5 @@
 import { useLogin } from "./loginHook";
-import Navbar from "../layout/Navbar";
+
 import { FormComponent } from "../basic/FormComponent";
 import { FormInput } from "../basic/FormInput";
 import { Button } from "../basic/Button";
@@ -9,7 +9,7 @@ export default function Login() {
 
 	return (
 		<>
-			<Navbar />
+		
 			<div className="min-h-screen flex items-center justify-center bg-[var(--background)] px-4 py-8">
 				<FormComponent
 					onSubmit={handleSubmit}

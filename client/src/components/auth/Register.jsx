@@ -1,5 +1,5 @@
 import { useRegister } from "./registerHook";
-import Navbar from "../layout/Navbar";
+
 import { FormComponent } from "../basic/FormComponent";
 import { FormInput } from "../basic/FormInput";
 import { Button } from "../basic/Button";
@@ -9,7 +9,7 @@ export default function Register() {
 
 	return (
 		<>
-			<Navbar />
+	
 			<div className="min-h-screen flex items-center justify-center bg-[var(--background)] p-4">
 				<FormComponent
 					onSubmit={handleSubmit}

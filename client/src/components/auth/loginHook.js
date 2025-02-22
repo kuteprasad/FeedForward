@@ -18,7 +18,7 @@ export const useLogin = () => {
     try {
       const { data } = await authService.login(formData);
       dispatch(setCredentials(data));
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
