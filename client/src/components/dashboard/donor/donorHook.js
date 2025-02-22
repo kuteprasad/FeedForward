@@ -8,7 +8,7 @@ export const useDonationForm = () => {
   const { user } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    donorId: user?._id,
+    donorId: user?.id,
     foodItems: [],
     deliveryBy: "SELF",
     location: {
