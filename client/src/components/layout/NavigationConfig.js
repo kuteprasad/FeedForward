@@ -8,7 +8,7 @@ export const getNavbarItems = (user) => [
   export const getSidebarItems = (user) => {
     if (!user) return [];
   
-    if (user.role === "ADMIN") {
+    if (user.role === "admin") {
       return [
         { name: "Dashboard", href: "/dashboard" },
         { name: "Users", href: "/admin/users" },
@@ -16,7 +16,7 @@ export const getNavbarItems = (user) => [
       ];
     }
   
-    if (user.role === "NGO") {
+    if (user.role === "ngo") {
       return [
         { name: "Dashboard", href: "/ngo/dashboard" },
         { name: "Available Donations", href: "/ngo/availabledonations" },
@@ -24,13 +24,13 @@ export const getNavbarItems = (user) => [
         { name: "Notifications", href: "/ngo/notifications" },
         {name: "My requests", href: "/ngo/myrequests"},
         { name: "Profile", href: "/ngo/profile" },
+        { name: "Verify NGO", href: "/ngo/verifyNgo" },
         
       ];
     }
   
     return [
       { name: "Dashboard", href: "/donor/dashboard" },
-      
       { name: "Profile", href: "/donor/profile" },
       { name: "Notifications", href: "/donor/notifications" },
       { name: "History", href: "/donor/history"},
