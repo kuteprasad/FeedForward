@@ -24,7 +24,7 @@ export const getNavbarItems = (user) => [
         { name: "Notifications", href: "/ngo/notifications" },
         {name: "My requests", href: "/ngo/myrequests"},
         { name: "Profile", href: "/ngo/profile" },
-        { name: "Verify NGO", href: "/ngo/verifyNgo" },
+        // { name: "Verify NGO", href: "/ngo/verifyNgo" },
         
       ];
     }

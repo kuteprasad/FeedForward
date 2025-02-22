@@ -23,11 +23,12 @@ import CreateDonation from "./CreateDonation.jsx";
 import MyRequest from "./components/dashboard/ngo/MyRequest.jsx";
 import AvailableDonations from "./components/dashboard/ngo/AvailableDonations.jsx";
 import History from "./components/common/History.jsx";
-import Profile from "./components/common/profile.jsx";
+// import Profile from "./components/common/profile.jsx";
 import NgoRequestBox from "./components/dashboard/admin/NgoRequestBox.jsx";
 import NgoDashboard from "./components/dashboard/ngo/NgoDashboard.jsx";
 import NgoVerificationForm from "./components/dashboard/ngo/NgoVerificationForm.jsx";
 
+import Profile from "./components/pages/Profile.jsx";
 function App() {
 	const { token, user } = useSelector((state) => state.auth);
 	const { mode } = useSelector((state) => state.theme);
@@ -106,7 +107,10 @@ function App() {
 						path="ngoList"
 						element={<NgoRequestBox />}
 					/>
-					{/* <Route path="profile" element={<Profile />} /> */}
+					<Route
+						path="profile"
+						element={<Profile />}
+					/>
 				</Route>
 
 				<Route

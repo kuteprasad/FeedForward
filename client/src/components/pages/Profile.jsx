@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { Label } from "../basic/Label";
 import { Button } from "../basic/Button";
 import { useNavigate } from "react-router-dom";
+import NgoVerificationForm from "../dashboard/ngo/NgoVerificationForm";
 // Uncomment if you have toast notifications configured
 // import { toast } from "react-toastify";
 
@@ -28,6 +29,7 @@ const Profile = () => {
 	const [profilePic, setProfilePic] = useState(null);
 	const { user } = useSelector((state) => state.auth);
 
+	const isVerifiedNgo = true;
 	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchProfileData = async () => {
@@ -115,10 +117,7 @@ const Profile = () => {
 				</h3>
 				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
 					<div className="flex flex-col items-center">
-						<Label
-							className="block text-sm font-medium text-gray-700"
-							
-						>
+						<Label className="block text-sm font-medium text-gray-700">
 							Profile Photo
 						</Label>
 
@@ -200,6 +199,7 @@ const Profile = () => {
 					</p>
 				</div>
 			</section>
+			<section>{profile?.isVerifiedNgo && <NgoVerificationForm />}</section>
 			<div className="flex justify-between items-center mt-6">
 				<Button
 					onClick={() => setEditing(true)}
