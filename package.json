@@ -7,7 +7,9 @@
     "client": "cd client && npm run dev",
     "server": "cd server && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install": "npm install && cd client && npm install && cd ../server && npm install",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+   "install": "npm run install && npm run install-server && npm run install-client",
     "remove": "cd client && rm -rf node_modules "
   },
   "repository": {

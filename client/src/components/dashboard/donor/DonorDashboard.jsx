@@ -6,6 +6,7 @@ import { FormInput } from "../../basic/FormInput";
 import { Toggle } from "../../basic/Toggle";
 import { FileInput } from "../../basic/FileInput";
 import { useDonationForm } from "./donorHook.js";
+import { useSelector } from "react-redux";
 
 export default function DonorDashboard() {
   const {
@@ -21,6 +22,9 @@ export default function DonorDashboard() {
     handleSubmit,
   } = useDonationForm();
 
+  const { notifications, isConnected } = useSelector((state) => state.websocket);
+  console.log(notifications);
+
   const [newItem, setNewItem] = useState({});
 
   const handleAddItem = () => {
@@ -31,26 +35,22 @@ export default function DonorDashboard() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
       <Button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="bg-[var(--primaryButton-bg)] text-[var(--primaryButton-text)]"
+        className="bg-primary text-white px-6 py-3 rounded-lg shadow-md transition-all duration-200 hover:bg-primary-dark"
       >
         Donate Now
       </Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="Create Donation" 
-      >
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Create Donation">
         <div className="space-y-6">
           {/* Food Items Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Food Items</h3>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-6">Food Items</h3>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
               <FormInput
                 placeholder="Item Name"
                 value={newItem.name || ""}
@@ -70,7 +70,7 @@ export default function DonorDashboard() {
                 }
               />
               <select
-                className="form-select"
+                className="form-select p-3 rounded-lg border border-gray-300"
                 value={newItem.quantityType || ""}
                 onChange={(e) =>
                   setNewItem((prev) => ({
@@ -106,7 +106,12 @@ export default function DonorDashboard() {
                   }))
                 }
               />
-              <Button onClick={handleAddItem} type="button" variant="secondary">
+              <Button
+                onClick={handleAddItem}
+                type="button"
+                variant="secondary"
+                className="w-full mt-4"
+              >
                 Add Item
               </Button>
             </div>
@@ -116,7 +121,7 @@ export default function DonorDashboard() {
               {formData.foodItems.map((item, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                  className="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm border border-gray-200"
                 >
                   <span>
                     {item.name} - {item.quantity} {item.quantityType}
@@ -125,6 +130,7 @@ export default function DonorDashboard() {
                     onClick={() => handleRemoveFoodItem(index)}
                     type="button"
                     variant="danger"
+                    className="text-red-600"
                   >
                     Remove
                   </Button>
@@ -139,16 +145,14 @@ export default function DonorDashboard() {
             <Toggle
               checked={formData.deliveryBy === "SELF"}
               onChange={() =>
-                handleDeliveryByChange(
-                  formData.deliveryBy === "SELF" ? "NGO" : "SELF"
-                )
+                handleDeliveryByChange(formData.deliveryBy === "SELF" ? "NGO" : "SELF")
               }
               labelLeft="NGO"
               labelRight="Self"
             />
 
             {formData.deliveryBy === "SELF" && (
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
                 <FormInput
                   placeholder="Delivery Person Name"
                   onChange={(e) =>
@@ -190,31 +194,23 @@ export default function DonorDashboard() {
           </div>
 
           {/* Location Section */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <Label>Pickup Location</Label>
             <FormInput
               placeholder="Address"
               value={formData.location.address}
               onChange={(e) =>
-                handleLocationUpdate(
-                  e.target.value,
-                  formData.location.latitude,
-                  formData.location.longitude
-                )
+                handleLocationUpdate(e.target.value, formData.location.latitude, formData.location.longitude)
               }
             />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <FormInput
                 type="number"
                 step="any"
                 placeholder="Latitude"
                 value={formData.location.latitude || ""}
                 onChange={(e) =>
-                  handleLocationUpdate(
-                    formData.location.address,
-                    parseFloat(e.target.value),
-                    formData.location.longitude
-                  )
+                  handleLocationUpdate(formData.location.address, parseFloat(e.target.value), formData.location.longitude)
                 }
               />
               <FormInput
@@ -223,17 +219,13 @@ export default function DonorDashboard() {
                 placeholder="Longitude"
                 value={formData.location.longitude || ""}
                 onChange={(e) =>
-                  handleLocationUpdate(
-                    formData.location.address,
-                    formData.location.latitude,
-                    parseFloat(e.target.value)
-                  )
+                  handleLocationUpdate(formData.location.address, formData.location.latitude, parseFloat(e.target.value))
                 }
               />
             </div>
             <Button
               onClick={handleGetLocation}
-              className="mt-2 bg-[var(--secondaryButton-bg)] text-[var(--secondaryButton-text)]"
+              className="w-full mt-4 bg-blue-500 text-white"
               type="button"
             >
               Get Current Location
@@ -242,7 +234,7 @@ export default function DonorDashboard() {
 
           <Button
             onClick={handleSubmit}
-            className="w-full bg-[var(--primaryButton-bg)] text-[var(--primaryButton-text)]"
+            className="w-full bg-green-500 text-white mt-8 py-3 rounded-lg shadow-md transition-all duration-200 hover:bg-green-600"
           >
             Confirm Posting
           </Button>

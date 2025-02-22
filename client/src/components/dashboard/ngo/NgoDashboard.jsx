@@ -1,62 +1,26 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
-import { ngoService } from "../../../services/ngo.service";
+import { useState } from "react";
 import { Button } from "../../basic/Button";
+import { useNgoDashboard } from "./ngoHook";
+import { FormInput } from "../../basic/FormInput";
 
 export default function NgoDashboard() {
-  const [donations, setDonations] = useState([]);
-  const [processedPostIds, setProcessedPostIds] = useState(new Set());
+  const {
+    donations,
+    user,
+    handleMakeRequest,
+    handleDeclineRequest,
+    updateNgoDetails,
+  } = useNgoDashboard();
 
-  const { notifications, isConnected } = useSelector(
-    (state) => state.websocket
-  );
-  const { user } = useSelector((state) => state.auth);
+  const [editingPost, setEditingPost] = useState(null);
+  const [ngoDetails, setNgoDetails] = useState({
+    location: { address: "", latitude: 0, longitude: 0 },
+    deliveryPerson: { name: "", mobNo: "", vehicleNo: "" },
+  });
 
-  // Handle new notifications
-  useEffect(() => {
-    const fetchNewDonations = async () => {
-      try {
-        for (const notification of notifications) {
-          // Skip if we've already processed this post
-          if (processedPostIds.has(notification.postId)) continue;
-
-          const response = await ngoService.getPostById(notification.postId);
-          if (response.success) {
-            setDonations((prev) => [...prev, response.data]);
-            setProcessedPostIds(
-              (prev) => new Set([...prev, notification.postId])
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching donations:", error);
-        toast.error("Failed to load new donations");
-      }
-    };
-
-    if (notifications.length > 0) {
-      fetchNewDonations();
-    }
-  }, [notifications, processedPostIds]);
-
-  const handleMakeRequest = async (postId) => {
-    try {
-      const response = await ngoService.sendRequest({
-        postId,
-        reqId: user.id,
-      });
-
-      if (response.success) {
-        toast.success("Request sent successfully!");
-        // Update donation status in UI if needed
-      } else {
-        toast.error(response.message || "Failed to send request");
-      }
-    } catch (error) {
-      console.error("Error sending request:", error);
-      toast.error("Failed to send request");
-    }
+  const handleUpdateDetails = (postId) => {
+    updateNgoDetails(postId, ngoDetails);
+    setEditingPost(null);
   };
 
   return (
@@ -69,12 +33,22 @@ export default function NgoDashboard() {
         {donations.map((donation) => (
           <div
             key={donation._id}
-            className="bg-[var(--card-bg-light)] dark:bg-[var(--card-bg-dark)] 
-                     p-6 rounded-lg shadow-md border border-[var(--border)]"
+            className="bg-[var(--card-bg)] p-6 rounded-lg shadow-md border border-[var(--border)]"
           >
-            <h3 className="text-lg font-semibold mb-2 text-[var(--text)]">
-              {donation.donorName}
-            </h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-[var(--text)]">
+                {donation.donorName}
+              </h3>
+              <span
+                className={`px-2 py-1 rounded-full text-xs ${
+                  donation.status === "ACCEPTED"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {donation.status}
+              </span>
+            </div>
 
             <div className="space-y-2 mb-4">
               {donation.foodItems.map((item, idx) => (
@@ -89,18 +63,104 @@ export default function NgoDashboard() {
             </div>
 
             <p className="text-sm text-[var(--text-secondary)] mb-4">
-              📍 {donation.location.address}
+              📍 {donation?.location?.address}
             </p>
 
-            <Button
-              onClick={() => handleMakeRequest(donation._id)}
-              disabled={donation.requestedBy?.includes(user.id)}
-              className="w-full bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
-            >
-              {donation.requestedBy?.includes(user.id)
-                ? "Request Sent"
-                : "Make Request"}
-            </Button>
+            {donation.status === "ACCEPTED" && donation.ngoId === user.id ? (
+              <>
+                {editingPost === donation._id ? (
+                  <div className="space-y-4">
+                    <FormInput
+                      placeholder="NGO Address"
+                      value={ngoDetails.location.address}
+                      onChange={(e) =>
+                        setNgoDetails((prev) => ({
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            address: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                    {donation.deliveryBy === "NGO" && (
+                      <>
+                        <FormInput
+                          placeholder="Delivery Person Name"
+                          value={ngoDetails.deliveryPerson.name}
+                          onChange={(e) =>
+                            setNgoDetails((prev) => ({
+                              ...prev,
+                              deliveryPerson: {
+                                ...prev.deliveryPerson,
+                                name: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                        <FormInput
+                          placeholder="Mobile Number"
+                          value={ngoDetails.deliveryPerson.mobNo}
+                          onChange={(e) =>
+                            setNgoDetails((prev) => ({
+                              ...prev,
+                              deliveryPerson: {
+                                ...prev.deliveryPerson,
+                                mobNo: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                        <FormInput
+                          placeholder="Vehicle Number"
+                          value={ngoDetails.deliveryPerson.vehicleNo}
+                          onChange={(e) =>
+                            setNgoDetails((prev) => ({
+                              ...prev,
+                              deliveryPerson: {
+                                ...prev.deliveryPerson,
+                                vehicleNo: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                      </>
+                    )}
+                    <Button
+                      onClick={() => handleUpdateDetails(donation._id)}
+                      className="w-full bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
+                    >
+                      Update Details
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={() => setEditingPost(donation._id)}
+                    className="w-full bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)]"
+                  >
+                    Edit Details
+                  </Button>
+                )}
+              </>
+            ) : (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => handleMakeRequest(donation._id)}
+                  disabled={donation.requestedBy?.includes(user.id)}
+                  className="flex-1 bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
+                >
+                  {donation.requestedBy?.includes(user.id)
+                    ? "Request Sent"
+                    : "Make Request"}
+                </Button>
+                <Button
+                  onClick={() => handleDeclineRequest(donation._id)}
+                  className="flex-1 bg-[var(--btn-danger-bg)] text-[var(--btn-danger-text)]"
+                >
+                  Decline
+                </Button>
+              </div>
+            )}
           </div>
         ))}
       </div>

@@ -19,7 +19,7 @@ import HomePage from "./components/Dummy-pages/homepage.jsx";
 import About from "./components/Dummy-pages/aboutpage.jsx";
 import Postings from "./components/dashboard/donor/MyDonations.jsx";
 import MyDonations from "./components/dashboard/donor/MyDonations.jsx";
-import CreateDonation from "./CreateDonation.jsx";
+
 import MyRequest from "./components/dashboard/ngo/MyRequest.jsx";
 import AvailableDonations from "./components/dashboard/ngo/AvailableDonations.jsx";
 import History from "./components/common/History.jsx";
@@ -137,10 +137,7 @@ function App() {
 						path="Mydonations"
 						element={<MyDonations />}
 					/>
-					<Route
-						path="createDonations"
-						element={<CreateDonation />}
-					/>
+					
 
 					<Route
 						path="notifications"
