@@ -14,6 +14,10 @@ import { Toaster } from 'react-hot-toast';
 import Notifications from './components/common/Notifications.jsx';
 import HomePage from './components/Dummy-pages/homepage.jsx';
 import About from './components/Dummy-pages/aboutpage.jsx';
+import History from './components/common/History.jsx';
+import Users from './components/dashboard/admin/Users.jsx';
+import Postings from './components/dashboard/donor/postings.jsx';
+import AvailableDonations from './components/dashboard/ngo/AvailableDonations.jsx';
 
 function App() {
   console.log(useWebSocket());
@@ -74,9 +78,10 @@ function App() {
             path="/notifications"
             element={<Notifications/>}
           />
-          
-
-
+          <Route path="/availabledonations" element={<AvailableDonations/>} /> 
+          <Route path="/postings" element={<Postings/>} /> 
+          <Route path="/admin/users" element={<Users/>} /> 
+          <Route path="/history" element={<History/>} />
           {/* Catch All */}
           <Route path="*" element={<Navigate to="/not-found" />} />
         </Routes>

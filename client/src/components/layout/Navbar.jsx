@@ -3,22 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/authSlice";
 import { toggleTheme } from "../../store/slices/themeSlice";
 import GTranslate from "../common/GTranslate";
+import { getNavbarItems } from './NavigationConfig';
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
   const { mode } = useSelector((state) => state.theme);
+  // const { user } = useSelector((state) => state.auth);
+  const navigation = getNavbarItems(user);
 
-  const navigation = user
-    ? [
-        { name: "Dashboard", href: "/dashboard" },
-        { name: "Orders", href: "/orders" },
-        { name: "Profile", href: "/profile" },
-        { name: "Home" , href:"/home"},
-        { name: "About Us" , href:"/about"}
-      ]
-    : [];
+  
 
   return (
     <nav className="bg-[var(--navbar-bg)] shadow-md fixed top-0 left-0 w-full z-50">
