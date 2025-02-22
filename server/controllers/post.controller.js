@@ -190,7 +190,7 @@ export const getpost = async (req, res) => {
     ]);
 
     if (data && data.length > 0) {
-        console.log("data[0]: ", data[0]);
+      console.log("data[0]: ", data[0]);
 
       return res.status(200).json({
         success: true,
@@ -215,7 +215,7 @@ export const getpost = async (req, res) => {
 
 export const sendRequest = async (req, res) => {
   const { reqId, postId } = req.body;
-console.log("sendRequest received");
+  console.log("sendRequest received");
   try {
     const response = await Order.findOneAndUpdate(
       { _id: postId }, // Filter by postId (ensure it's a valid ID)
@@ -233,7 +233,7 @@ console.log("sendRequest received");
       type: "NEWPOST",
       from: reqId,
       to: response.donorId,
-      postId:postId,
+      postId: postId,
       message: `request for food by ${reqId}`,
       requester: requester,
       isRead: false,
@@ -244,13 +244,13 @@ console.log("sendRequest received");
       JSON.stringify({
         from: "system",
         to: [response.donorId],
-        reqId:reqId,
-        updated:true,
+        reqId: reqId,
+        updated: true,
         message: `request for food by ${reqId}`,
       })
     );
 
-console.log("sendRequest successfull");
+    console.log("sendRequest successfull");
 
     return res.status(200).json({
       success: true,
@@ -266,7 +266,6 @@ console.log("sendRequest successfull");
     });
   }
 };
-
 
 export const getDonations = async (req, res) => {
   const { donorId } = req.params;
@@ -298,7 +297,7 @@ export const getDonations = async (req, res) => {
   }
 };
 
-export const acceptRequest = async (req,res)=>{
+export const acceptRequest = async (req, res) => {
   const postData = req.body;
   console.log(postData);
   try {
@@ -356,8 +355,182 @@ export const acceptRequest = async (req,res)=>{
       error: error.message,
     });
   }
-}
+};
 
-export const updatestatus = async (req,res)=>{
+export const updatestatus = async (req, res) => {
   
-}
+};
+
+// Get all posts where NGO has received notifications
+export const getNgoRequests = async (req, res) => {
+  const { ngoId } = req.params;
+  console.log("🔍 Fetching NGO requests for:", ngoId);
+
+  try {
+    // Find NGO and populate their requestReceived posts
+    const ngoUser = await User.findById(ngoId).populate({
+      path: "requestReceived",
+      populate: {
+        path: "donorId",
+        select: "username",
+      },
+    });
+
+    if (!ngoUser) {
+      return res.status(404).json({
+        success: false,
+        message: "NGO not found",
+      });
+    }
+
+    console.log("✅ Found NGO requests:", ngoUser.requestReceived);
+
+    return res.status(200).json({
+      success: true,
+      data: ngoUser.requestReceived,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching NGO requests:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+// Decline a donation request
+export const declineNgoRequest = async (req, res) => {
+  const { postId, ngoId } = req.body;
+  console.log("❌ Declining request:", { postId, ngoId });
+
+  try {
+    // Remove NGO from notificationSent array in Order
+    const updatedPost = await Order.findByIdAndUpdate(
+      postId,
+      {
+        $pull: {
+          notificationSent: ngoId,
+          requestedBy: ngoId,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Remove postId from NGO's requestReceived array
+    await User.findByIdAndUpdate(ngoId, { $pull: { requestReceived: postId } });
+
+    // Send notification to donor
+    const notifi = {
+      type: "NEWPOST",
+      from: ngoId,
+      to: updatedPost.donorId,
+      postId: postId,
+      message: `NGO has declined the request`,
+      isRead: false,
+    };
+    await addNotification(notifi);
+
+    // Emit websocket notification
+    io.emit(
+      "notification",
+      JSON.stringify({
+        from: ngoId,
+        to: [updatedPost.donorId],
+        postId,
+        message: "NGO has declined the request",
+        updated: true,
+      })
+    );
+
+    console.log("✅ Request declined successfully");
+
+    return res.status(200).json({
+      success: true,
+      message: "Request declined successfully",
+      data: updatedPost,
+    });
+  } catch (error) {
+    console.error("❌ Error declining request:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+// Update NGO details for accepted donation
+export const updateNgoDetails = async (req, res) => {
+  const { postId, locationNgo, deliveryPerson } = req.body;
+  console.log("📝 Updating NGO details:", {
+    postId,
+    locationNgo,
+    deliveryPerson,
+  });
+
+  try {
+    // Update post with NGO details
+    const updatedPost = await Order.findByIdAndUpdate(
+      postId,
+      {
+        locationNgo,
+        deliveryPerson,
+        trackStatus: "PACKED", // Update track status when NGO adds details
+      },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Send notification to donor
+    const notifi = {
+      type: "NEWPOST",
+      from: updatedPost.ngoId,
+      to: updatedPost.donorId,
+      postId: postId,
+      message: "NGO has updated delivery details",
+      isRead: false,
+    };
+    await addNotification(notifi);
+
+    // Emit websocket notification
+    io.emit(
+      "notification",
+      JSON.stringify({
+        from: updatedPost.ngoId,
+        to: [updatedPost.donorId],
+        postId,
+        message: "NGO has updated delivery details",
+        updated: true,
+      })
+    );
+
+    console.log("✅ NGO details updated successfully");
+
+    return res.status(200).json({
+      success: true,
+      message: "NGO details updated successfully",
+      data: updatedPost,
+    });
+  } catch (error) {
+    console.error("❌ Error updating NGO details:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
