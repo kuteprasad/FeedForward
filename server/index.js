@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import postRoutes from './routes/post.routes.js';
+import notificationRoutes from './routes/notification.routes.js'
 import http from 'http';
 import { Server } from 'socket.io';
 
@@ -33,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/post',postRoutes);
+app.use('/api/notifications',notificationRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)

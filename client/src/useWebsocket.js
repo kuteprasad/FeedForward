@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
 // import { useProfile } from './pages/useProfile';  // Assuming useProfile is in JS as well
 
 const useWebSocket = () => {
+  const { token, user } = useSelector(state => state.auth);
+  // console.log(user)
 //   const { user } = useProfile();
   const [notifications, setNotifications] = useState([]);
 
@@ -15,21 +18,20 @@ const useWebSocket = () => {
 
     socket.on('notification', (message) => {
       // Assuming the message is a JSON string
-      console.log(message);
-    //   try {
-    //     message = JSON.parse(message);
-    //     const receivers = message.to;
-    //     console.log(receivers);
-    //     console.log(message.message);
-
-    //     // Check if the user's email is included in the receivers list
-    //     if (receivers.includes(user?.email)) {
-    //       console.log(user?.email);
-    //       setNotifications((prev) => [...prev, message.message]);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error parsing message:', error);
-    //   }
+      // console.log(message);
+      try {
+        message = JSON.parse(message);
+        const receivers = message.to;
+        // console.log(receivers);
+        // console.log(message.message);
+        console.log(user);
+        if (receivers.includes(user.id)) {
+          console.log(user.id);
+          setNotifications((prev) => [...prev, message.message]);
+        }
+      } catch (error) {
+        console.error('Error parsing message:', error);
+      }
     });
 
     return () => {
