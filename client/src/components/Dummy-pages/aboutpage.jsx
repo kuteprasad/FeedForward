@@ -13,7 +13,7 @@ const About = () => {
 			<ImpactMetrics />
 			<HowItWorks />
 			<VisionMission />
-			{/* DonorNgoSection has two codes and second one will add to About Section */}
+			
 			<DonorNgoSection />
 			<WhyChooseUsContact />
 		</>

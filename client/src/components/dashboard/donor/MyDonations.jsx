@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Postings = () => {
+const MyDonations = () => {
   return (
     <div>postings</div>
   )
 }
 
-export default Postings
+export default MyDonations

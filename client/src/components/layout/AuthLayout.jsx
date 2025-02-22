@@ -14,7 +14,7 @@ export default function AuthLayout() {
       <Navbar />
 
       {/* Main Content */}
-      <div className="flex pt-16">
+      <div >
        
           <Outlet />
    

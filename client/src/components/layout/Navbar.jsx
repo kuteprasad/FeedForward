@@ -28,7 +28,7 @@ export default function Navbar() {
 
           {/* Navigation Links - Hidden on Mobile */}
           <div className="hidden md:flex space-x-6">
-            {getNavigation().map((item) => (
+            {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -38,7 +38,7 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
-            {/* Common link for all authenticated users */}
+            {/* Common link for all authenticated users
             {user && (
               <Link
                 to="/profile"
@@ -47,7 +47,7 @@ export default function Navbar() {
               >
                 Profile
               </Link>
-            )}
+            )} */}
           </div>
 
           {/* Right Side Items */}

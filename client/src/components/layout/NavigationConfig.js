@@ -1,8 +1,8 @@
 export const getNavbarItems = (user) => [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Profile", href: "/profile" },
-    { name: "Home", href: "/home" },
-    { name: "About Us", href: "/about" }
+    
+    // { name: "Profile", href: "/profile" },
+    { name: "Home", href: "/common/home" },
+    { name: "About Us", href: "/common/about" }
   ];
   
   export const getSidebarItems = (user) => {
@@ -12,25 +12,29 @@ export const getNavbarItems = (user) => [
       return [
         { name: "Dashboard", href: "/dashboard" },
         { name: "Users", href: "/admin/users" },
-        // { name: "Settings", href: "/admin/settings" },
+        
       ];
     }
   
     if (user.role === "NGO") {
       return [
-        { name: "Dashboard", href: "/dashboard" },
-        { name: "View available donations", href: "/availabledonations" },
-        { name: "Profile", href: "/profile" },
-        { name: "Notifications", href: "/notifications" }
+        { name: "Dashboard", href: "/ngo/dashboard" },
+        { name: "Available Donations", href: "/ngo/availabledonations" },
+        
+        { name: "Notifications", href: "/ngo/notifications" },
+        {name: "My requests", href: "/ngo/myrequests"},
+        { name: "Profile", href: "/ngo/profile" },
         
       ];
     }
   
     return [
-      { name: "Dashboard", href: "/dashboard" },
-      { name: "Active Postings", href: "/postings" },
-      { name: "Profile", href: "/profile" },
-      { name: "Notifications", href: "/notifications" },
-      { name: "History", href: "/history"}
+      { name: "Dashboard", href: "/donor/dashboard" },
+      
+      { name: "Profile", href: "/donor/profile" },
+      { name: "Notifications", href: "/donor/notifications" },
+      { name: "History", href: "/donor/history"},
+      {name: "My Donations", href: "/donor/Mydonations"},
+      {name: "Create Donations", href: "/donor/createDonations"}
     ];
   };
