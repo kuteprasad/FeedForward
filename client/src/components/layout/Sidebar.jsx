@@ -19,11 +19,13 @@ export default function Sidebar() {
           { name: "Dashboard", href: "/dashboard" },
           { name: "Orders", href: "/orders" },
           { name: "Profile", href: "/profile" },
+          {name:"Notifications",href:"/notifications"}
         ]
       : [
           { name: "Dashboard", href: "/dashboard" },
           { name: "My Orders", href: "/orders" },
           { name: "Profile", href: "/profile" },
+          {name:"Notifications",href:"/notifications"}
         ];
 
   return (

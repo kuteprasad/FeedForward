@@ -11,6 +11,7 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Error from './components/common/Error.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import { Toaster } from 'react-hot-toast';
+import Notifications from './components/common/Notifications.jsx';
 
 function App() {
   console.log(useWebSocket());
@@ -65,6 +66,12 @@ function App() {
             path="/"
             element={<Navigate to={token ? "/dashboard" : "/login"} />}
           />
+          <Route
+            path="/notifications"
+            element={<Notifications/>}
+          />
+          
+
 
           {/* Catch All */}
           <Route path="*" element={<Navigate to="/not-found" />} />
