@@ -11,6 +11,8 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Error from './components/common/Error.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import { Toaster } from 'react-hot-toast';
+import HomePage from './components/Dummy-pages/homepage.jsx';
+import About from './components/Dummy-pages/aboutpage.jsx';
 
 function App() {
   console.log(useWebSocket());
@@ -34,7 +36,9 @@ function App() {
             path="/register"
             element={!token ? <Register /> : <Navigate to="/dashboard" />}
           />
-
+          <Route path='/home' element ={<HomePage/>}/>
+          <Route path='/about' element ={<About/>}/>
+          
           {/* Protected Routes */}
           <Route
             path="/dashboard"
