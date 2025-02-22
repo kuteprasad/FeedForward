@@ -37,7 +37,7 @@ async function createPost(postData) {
         io.emit("notification", JSON.stringify({
             from: newPost.donorId,
             to: ngos,
-            postId:postData._id,
+            postId:newPost._id,
             message: `Post is created by donor in your area`
         }));
         
