@@ -60,7 +60,7 @@ server.listen(PORT,()=>{
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  io.emit('notification', "added you");
+  // io.emit('notification', "added you");
   // Listen for custom events
   socket.on('message', (message) => {
       console.log('Received message: ', message);

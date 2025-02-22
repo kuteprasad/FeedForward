@@ -4,13 +4,15 @@ import { useSelector } from 'react-redux';
 // import { useProfile } from './pages/useProfile';  // Assuming useProfile is in JS as well
 
 const useWebSocket = () => {
-  const { token, user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.auth);
   // console.log(user)
 //   const { user } = useProfile();
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    const socket = io('http://localhost:4000');  // Update to your WebSocket server URL
+    // console.log('Connecting to WebSocket server');
+    const socket = io(import.meta.env.VITE_WEBSOCKET_API_URL);  // Update to your WebSocket server URL
+    // console.log(import.meta.env.VITE_WEBSOCKET_API_URL);
 
     socket.on('connect', () => {
       console.log('Connected to WebSocket server');
@@ -27,14 +29,15 @@ const useWebSocket = () => {
         console.log(user);
         if (receivers.includes(user.id)) {
           console.log(user.id);
-          setNotifications((prev) => [...prev, message.message]);
+          setNotifications((prev) => [...prev, message]);
         }
-      } catch (error) {
+      } catch (error) { 
         console.error('Error parsing message:', error);
       }
     });
 
     return () => {
+      console.log('Disconnecting from WebSocket server');
       socket.disconnect();
     };
   }, []);  // Adding dependency on user.email in case the user changes
