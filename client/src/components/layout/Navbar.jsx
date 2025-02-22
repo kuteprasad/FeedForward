@@ -15,6 +15,8 @@ export default function Navbar() {
         { name: "Dashboard", href: "/dashboard" },
         { name: "Orders", href: "/orders" },
         { name: "Profile", href: "/profile" },
+        { name: "Home" , href:"/home"},
+        { name: "About Us" , href:"/about"}
       ]
     : [];
 
