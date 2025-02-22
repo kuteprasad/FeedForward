@@ -23,6 +23,13 @@ async function createPost(postData) {
     let ngos = [];
     for (let i in locations) {
       const ids = locations[i]["_id"];
+      const data= await User.findByIdAndUpdate(ids,{
+          $addToSet:{
+            requestRecieved:ids
+        }
+      },{
+        new:true
+      });
       ngos.push(ids);
       const notifi = {
         type: "NEWPOST",
@@ -33,6 +40,8 @@ async function createPost(postData) {
         isRead: false,
       };
       //   console.log("notification", notifi);
+      
+      
       const response = await addNotification(notifi);
     }
 
@@ -45,8 +54,8 @@ async function createPost(postData) {
         message: `Post is created by donor in your area`,
       })
     );
-
-    return newPost.toObject();
+    const updatedpost = await Order.updateOne({_id:newPost._id},{$set:{notificationSent=ngos}})
+    return updatedpost.toObject();
   } catch (error) {
     console.error("Error creating post:", error);
     throw error;
@@ -270,13 +279,15 @@ console.log("sendRequest successfull");
 
 export const getDonations = async (req, res) => {
   const { donorId } = req.params;
+  console.log("getdonations for : ",donorId);
+  // (donorId)
 
   try {
     const donations = await Order.find({ donorId: donorId }).populate(
-      "donorId",
-      "username"
+      "donorId"
     );
-
+    console.log(donations);
+    
     if (!donations || donations.length === 0) {
       return res
         .status(404)
@@ -358,6 +369,62 @@ export const acceptRequest = async (req,res)=>{
   }
 }
 
-export const updatestatus = async (req,res)=>{
-  
-}
+export const updatestatus = async (req, res) => {
+  const { postId,ngoId } = req.body;
+  const {action} = req.body;
+  console.log(req.body);
+  try {
+    const existing = await Order.findOne({ _id: postId }).exec();
+    console.log(existing);
+    if (existing) {
+      try {
+        const updatedPost = await Order.updateOne(
+          { _id: postId },
+          { $set: {status:action,ngoId:ngoId} },
+          { new: true }
+        );
+        console.log("updated post is ", updatedPost);
+        const notifi = {
+          type: "NEWPOST",
+          from: "60b8d6e6f92a4e1d8b6a3c47",
+          to: ngoId,
+          message: "Your request is accepted !",
+          isRead: false,
+        };
+        const response = await addNotification(notifi);
+        // console.log(response)
+        io.emit(
+          "notification",
+          JSON.stringify({
+            from: 'server',
+            to: [ngoId],
+            message: `Your request is accepted!`,
+          })
+        );
+        
+        return res.status(200).json({
+          success: true,
+          message: "Post updated successfully",
+          data: updatedPost,
+        });
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update post",
+          error: error.message,
+        });
+      }
+    } else {
+      return res
+        .status(500)
+        .json({ success: false, message: "Post does not exist" });
+    }
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
