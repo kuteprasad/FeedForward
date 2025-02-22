@@ -9,6 +9,7 @@ export const OrderStatus = {
 };
 
 export const TrackStatus = {
+    PACKED: 'PACKED',
     PICKUP: 'PICKUP',
     TRANSIT: 'TRANSIT',
     DELIVERED: 'DELIVERED'
@@ -61,7 +62,12 @@ const OrderSchema = new mongoose.Schema({
         mobNo: { type: String },
         vehicleNo: { type: String },
     },
-    location: {
+    locationDonor: {
+        address: { type: String },
+        latitude: { type: Number },
+        longitude: { type: Number }
+    },
+    locationNgo: {
         address: { type: String },
         latitude: { type: Number },
         longitude: { type: Number }
@@ -80,7 +86,7 @@ const OrderSchema = new mongoose.Schema({
             enum: Object.values(QuantityType),
             required: true,
         },
-        photo: { type: Object, required: false },
+        photo: { type: String, required: false },
         expiryDate: {
             type: Date
         },
