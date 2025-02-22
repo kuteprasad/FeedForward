@@ -10,7 +10,7 @@ const useWebSocket = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    const socket = io('http://localhost:4000');  // Update to your WebSocket server URL
+    const socket = io('http://localhost:3001');  // Update to your WebSocket server URL
 
     socket.on('connect', () => {
       console.log('Connected to WebSocket server');
