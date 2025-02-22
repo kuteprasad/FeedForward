@@ -1,5 +1,6 @@
 
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js";
 import {io} from "../index.js"
 import { getNearestLocations } from "../services/locationService.js";
 import { addNotification } from "../services/notificationService.js";
@@ -140,6 +141,23 @@ export const sendRequest = async (req, res) => {
         if (!response) {
             return res.status(404).json({ success: false, message: 'Post not found' });
         }
+        const requester= await User.findById(reqId).exec();
+        const  notifi={
+            "type": "NEWPOST",
+            "from": "60b8d6e6f92a4e1d8b6a3c47",
+            "to": response.donorId,
+            "message": "request for food!",
+            "requester":requester,
+            "isRead": false
+          }
+        const data = await addNotification(notifi);
+        io.emit("notification", JSON.stringify({
+            from: "system",
+            to: [response.donorId],
+            message: `request for food!`
+        }));
+
+        
 
         return res.status(200).json({ success: true, message: 'Request added successfully', data: response });
     } catch (error) {
