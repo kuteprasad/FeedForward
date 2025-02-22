@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { authAPI } from "../../services/api";
+
 import { setCredentials } from "../../store/slices/authSlice";
+import { authService } from "../../services/auth.service";
 
 export const useRegister = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export const useRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await authAPI.register(formData);
+      const { data } = await authService.register(formData);
       dispatch(setCredentials(data));
       navigate("/dashboard");
     } catch (error) {

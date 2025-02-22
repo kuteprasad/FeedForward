@@ -12,9 +12,5 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const authAPI = {
-  register: (userData) => api.post('/auth/register', userData),
-  login: (credentials) => api.post('/auth/login', credentials),
-};
 
 export default api;
