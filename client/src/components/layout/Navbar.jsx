@@ -4,19 +4,35 @@ import { logout } from "../../store/slices/authSlice";
 import { toggleTheme } from "../../store/slices/themeSlice";
 import GTranslate from "../common/GTranslate";
 
+const navigationConfig = {
+  donor: [
+    { name: "Dashboard", href: "/donor" },
+    { name: "My Donations", href: "/donor/donations" },
+    { name: "Create Donation", href: "/donor/create" },
+  ],
+  ngo: [
+    { name: "Dashboard", href: "/ngo" },
+    { name: "Available Donations", href: "/ngo/donations" },
+    { name: "My Requests", href: "/ngo/requests" },
+  ],
+  admin: [
+    { name: "Dashboard", href: "/admin" },
+    { name: "Users", href: "/admin/users" },
+    { name: "Reports", href: "/admin/reports" },
+  ],
+};
+
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
   const { mode } = useSelector((state) => state.theme);
 
-  const navigation = user
-    ? [
-        { name: "Dashboard", href: "/dashboard" },
-        { name: "Orders", href: "/orders" },
-        { name: "Profile", href: "/profile" },
-      ]
-    : [];
+  const getNavigation = () => {
+    if (!user?.role) return [];
+    const role = user.role.toLowerCase();
+    return navigationConfig[role] || [];
+  };
 
   return (
     <nav className="bg-[var(--navbar-bg)] shadow-md fixed top-0 left-0 w-full z-50">
@@ -25,13 +41,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-xl font-bold text-[var(--navbar-text)]">
-              InnovateYou
+              FeedForward
             </span>
           </Link>
 
           {/* Navigation Links - Hidden on Mobile */}
           <div className="hidden md:flex space-x-6">
-            {navigation.map((item) => (
+            {getNavigation().map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -41,6 +57,16 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
+            {/* Common link for all authenticated users */}
+            {user && (
+              <Link
+                to="/profile"
+                className="text-[var(--navbar-text)] hover:text-[var(--primary)] 
+                         transition duration-300 text-sm font-medium"
+              >
+                Profile
+              </Link>
+            )}
           </div>
 
           {/* Right Side Items */}

@@ -1,20 +1,13 @@
-import { useSelector } from "react-redux";
+
 import Navbar from "../layout/Navbar";
 import Sidebar from "../layout/Sidebar";
-import AdminDashboard from "./admin/AdminDashboard";
-import DonorDashboard from "./donor/DonorDashboard";
-import NgoDashboard from "./ngo/NgoDashboard";
 
-const ROLE_COMPONENTS = {
-  ADMIN: AdminDashboard,
-  DONOR: DonorDashboard,
-  NGO: NgoDashboard,
-};
+import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
-  const { user } = useSelector((state) => state.auth);
-  const DashboardComponent = ROLE_COMPONENTS[user?.role] || DonorDashboard;
 
+
+  console.log("reaced dashboard");
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Navbar */}
@@ -30,7 +23,7 @@ export default function Dashboard() {
         <main className="flex-1 p-6 md:ml-64">
           {" "}
           {/* ml-64 to account for sidebar width */}
-          <DashboardComponent />
+          <Outlet />
         </main>
       </div>
     </div>

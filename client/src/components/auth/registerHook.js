@@ -20,7 +20,7 @@ export const useRegister = () => {
     try {
       const { data } = await authService.register(formData);
       dispatch(setCredentials(data));
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error(error);
     }

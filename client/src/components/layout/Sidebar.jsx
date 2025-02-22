@@ -1,32 +1,45 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+const navigationConfig = {
+  admin: [
+    { name: "Dashboard", href: "/admin" },
+    { name: "Users", href: "/admin/users" },
+    { name: "Reports", href: "/admin/reports" },
+    { name: "Settings", href: "/admin/settings" },
+    { name: "Notifications", href: "/notifications" },
+  ],
+  ngo: [
+    { name: "Dashboard", href: "/ngo" },
+    { name: "Available Donations", href: "/ngo/donations" },
+    { name: "My Requests", href: "/ngo/requests" },
+    { name: "Profile", href: "/profile" },
+    { name: "Notifications", href: "/notifications" },
+  ],
+  donor: [
+    { name: "Dashboard", href: "/donor" },
+    { name: "My Donations", href: "/donor/donations" },
+    { name: "Create Donation", href: "/donor/create" },
+    { name: "Profile", href: "/profile" },
+    { name: "Notifications", href: "/notifications" },
+  ],
+};
 
 export default function Sidebar() {
   const { user } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
-  // Define sidebar items based on user role
-  const sidebarItems =
-    user?.role === "ADMIN"
-      ? [
-          { name: "Dashboard", href: "/dashboard" },
-          { name: "Users", href: "/admin/users" },
-          { name: "Settings", href: "/admin/settings" },
-        ]
-      : user?.role === "NGO"
-      ? [
-          { name: "Dashboard", href: "/dashboard" },
-          { name: "Orders", href: "/orders" },
-          { name: "Profile", href: "/profile" },
-          {name:"Notifications",href:"/notifications"}
-        ]
-      : [
-          { name: "Dashboard", href: "/dashboard" },
-          { name: "My Orders", href: "/orders" },
-          { name: "Profile", href: "/profile" },
-          {name:"Notifications",href:"/notifications"}
-        ];
+  const getNavigation = () => {
+    if (!user?.role) return [];
+    const role = user.role.toLowerCase();
+    return navigationConfig[role] || [];
+  };
+
+  const isActive = (href) => {
+    return location.pathname === href;
+  };
 
   return (
     <>
@@ -54,18 +67,23 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div
         className={`fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] 
-                    bg-[var(--sidebar-bg)] py-6 px-4 shadow-lg transition-transform 
-                    transform ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-                    md:translate-x-0`}
+                   bg-[var(--sidebar-bg)] py-6 px-4 shadow-lg transition-transform 
+                   transform ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+                   md:translate-x-0`}
       >
         <nav className="space-y-2">
-          {sidebarItems.map((item) => (
+          {getNavigation().map((item) => (
             <Link
               key={item.name}
               to={item.href}
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg
-                       text-[var(--text)] hover:bg-[var(--accent)]
-                       transition duration-200"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg
+                       transition duration-200
+                       ${
+                         isActive(item.href)
+                           ? "bg-[var(--accent)] text-[var(--accent-text)]"
+                           : "text-[var(--text)] hover:bg-[var(--accent-hover)]"
+                       }`}
+              onClick={() => setIsOpen(false)}
             >
               <span>{item.name}</span>
             </Link>
