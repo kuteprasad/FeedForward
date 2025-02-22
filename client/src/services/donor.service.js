@@ -16,6 +16,8 @@ export const donorService = {
   getDonations: async (donorId) => {
     try {
       const response = await api.get(`/post/donor/${donorId}`);
+      console.log(response);
+      
       return response.data;
     } catch (error) {
       throw error;
