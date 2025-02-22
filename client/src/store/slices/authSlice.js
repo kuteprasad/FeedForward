@@ -1,35 +1,37 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authAPI } from '../../services/api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { authAPI } from "../../services/api";
 
 export const loginUser = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (credentials, { rejectWithValue }) => {
     try {
       const { data } = await authAPI.login(credentials);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+      return rejectWithValue(error.response?.data?.message || "Login failed");
     }
   }
 );
 
 export const registerUser = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData, { rejectWithValue }) => {
     try {
       const { data } = await authAPI.register(userData);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Registration failed');
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed"
+      );
     }
   }
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: {
-    user: null,
-    token: localStorage.getItem('token'),
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    token: localStorage.getItem("token"),
     isLoading: false,
     error: null,
   },
@@ -37,12 +39,14 @@ const authSlice = createSlice({
     setCredentials: (state, { payload }) => {
       state.user = payload.user;
       state.token = payload.token;
-      localStorage.setItem('token', payload.token);
+      localStorage.setItem("user", JSON.stringify(payload.user));
+      localStorage.setItem("token", payload.token);
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
-      localStorage.removeItem('token');
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
     clearError: (state) => {
       state.error = null;
@@ -58,7 +62,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = payload.user;
         state.token = payload.token;
-        localStorage.setItem('token', payload.token);
+        localStorage.setItem("user", JSON.stringify(payload.user));
+        localStorage.setItem("token", payload.token);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -72,7 +77,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = payload.user;
         state.token = payload.token;
-        localStorage.setItem('token', payload.token);
+        localStorage.setItem("user", JSON.stringify(payload.user));
+        localStorage.setItem("token", payload.token);
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.isLoading = false;
