@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/create', create);
 router.put('/update',update);
-router.get('/seepost',getpost);
+router.get('/getpost', getpost);
 router.put('/sendrequest',sendRequest)
 // router.post('/login', login);
 

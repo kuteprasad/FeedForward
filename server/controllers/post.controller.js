@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import { io } from "../index.js";
 import { getNearestLocations } from "../services/locationService.js";
 import { addNotification } from "../services/notificationService.js";
+import mongoose from "mongoose";
 
 async function createPost(postData) {
   // console.log();
@@ -31,7 +32,7 @@ async function createPost(postData) {
         message: "Post is created by donor in your area",
         isRead: false,
       };
-    //   console.log("notification", notifi);
+      //   console.log("notification", notifi);
       const response = await addNotification(notifi);
     }
 
@@ -46,7 +47,6 @@ async function createPost(postData) {
     );
 
     return newPost.toObject();
-    
   } catch (error) {
     console.error("Error creating post:", error);
     throw error;
@@ -59,13 +59,11 @@ export const create = async (req, res) => {
   try {
     const response = createPost(post);
     if (typeof response === "object") {
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Post created successfully",
-          data: response,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "Post created successfully",
+        data: response,
+      });
     } else {
       return res
         .status(500)
@@ -73,13 +71,11 @@ export const create = async (req, res) => {
     }
   } catch (error) {
     console.error("Error creating post:", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 };
 
@@ -116,21 +112,17 @@ export const update = async (req, res) => {
           console.log("notification added");
         }
 
-        return res
-          .status(200)
-          .json({
-            success: true,
-            message: "Post updated successfully",
-            data: updatedPost,
-          });
+        return res.status(200).json({
+          success: true,
+          message: "Post updated successfully",
+          data: updatedPost,
+        });
       } catch (error) {
-        return res
-          .status(500)
-          .json({
-            success: false,
-            message: "Failed to update post",
-            error: error.message,
-          });
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update post",
+          error: error.message,
+        });
       }
     } else {
       return res
@@ -139,13 +131,11 @@ export const update = async (req, res) => {
     }
   } catch (error) {
     console.error("Error creating post:", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 };
 
@@ -154,35 +144,73 @@ export const getpost = async (req, res) => {
   console.log(id);
 
   try {
-    const data = await Order.findById(id).exec();
-    if (data) {
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "Post found successfully",
-          data: data,
-        });
+    // Using aggregation to join Order and User collections
+    const data = await Order.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "donorId",
+          foreignField: "_id",
+          as: "donor",
+        },
+      },
+      {
+        $project: {
+          postId: "$_id",
+          donorName: { $arrayElemAt: ["$donor.username", 0] },
+          foodItems: {
+            $map: {
+              input: "$foodItems",
+              as: "item",
+              in: {
+                name: "$$item.name",
+                quantity: "$$item.quantity",
+                quantityType: "$$item.quantityType",
+                expiryDate: "$$item.expiryDate",
+              },
+            },
+          },
+          location: {
+            address: "$location.address",
+            latitude: "$location.latitude",
+            longitude: "$location.longitude",
+          },
+          requestedBy: 1,
+          status: 1,
+        },
+      },
+    ]);
+
+    if (data && data.length > 0) {
+        console.log("data[0]: ", data[0]);
+
+      return res.status(200).json({
+        success: true,
+        message: "Post found successfully",
+        data: data[0],
+      });
     } else {
-      return res
-        .status(404)
-        .json({ success: false, message: "Post not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
     }
   } catch (error) {
     console.log("Error in postController: ", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 };
 
 export const sendRequest = async (req, res) => {
   const { reqId, postId } = req.body;
-
+console.log("sendRequest received");
   try {
     const response = await Order.findOneAndUpdate(
       { _id: postId }, // Filter by postId (ensure it's a valid ID)
@@ -198,7 +226,7 @@ export const sendRequest = async (req, res) => {
     const requester = await User.findById(reqId).exec();
     const notifi = {
       type: "NEWPOST",
-      from: "60b8d6e6f92a4e1d8b6a3c47",
+      from: reqId,
       to: response.donorId,
       message: "request for food!",
       requester: requester,
@@ -214,21 +242,19 @@ export const sendRequest = async (req, res) => {
       })
     );
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Request added successfully",
-        data: response,
-      });
+console.log("sendRequest successfull");
+
+    return res.status(200).json({
+      success: true,
+      message: "Request added successfully",
+      data: response,
+    });
   } catch (error) {
     console.error("Error in sendRequest:", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 };

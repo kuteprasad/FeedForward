@@ -73,7 +73,7 @@ export default function NgoDashboard() {
                      p-6 rounded-lg shadow-md border border-[var(--border)]"
           >
             <h3 className="text-lg font-semibold mb-2 text-[var(--text)]">
-              Donation #{donation._id.slice(-4)}
+              {donation.donorName}
             </h3>
 
             <div className="space-y-2 mb-4">
