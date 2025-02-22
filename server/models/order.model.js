@@ -47,6 +47,10 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    notificationSent: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     trackStatus: {
         type: String,
         enum: Object.values(TrackStatus),

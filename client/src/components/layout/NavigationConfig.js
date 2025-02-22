@@ -20,7 +20,6 @@ export const getNavbarItems = (user) => [
       return [
         { name: "Dashboard", href: "/ngo/dashboard" },
         { name: "Available Donations", href: "/ngo/availabledonations" },
-        
         { name: "Notifications", href: "/ngo/notifications" },
         {name: "My requests", href: "/ngo/myrequests"},
         { name: "Profile", href: "/ngo/profile" },
@@ -34,7 +33,6 @@ export const getNavbarItems = (user) => [
       { name: "Profile", href: "/donor/profile" },
       { name: "Notifications", href: "/donor/notifications" },
       { name: "History", href: "/donor/history"},
-      {name: "My Donations", href: "/donor/Mydonations"},
-      {name: "Create Donations", href: "/donor/createDonations"}
+      {name: "My Donations", href: "/donor/Mydonations"}
     ];
   };
