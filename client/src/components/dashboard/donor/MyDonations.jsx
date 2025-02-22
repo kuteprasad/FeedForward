@@ -100,7 +100,7 @@ export default function MyDonations() {
                 Pickup Location:
               </h3>
               <p className="text-sm text-[var(--text-secondary)]">
-                📍 {donation.location.address}
+                📍 {donation?.location?.address}
               </p>
             </div>
 
