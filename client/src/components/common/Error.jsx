@@ -1,14 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
 
-export default function Error({ code = '404', message }) {
+export default function Error({ code = "404", message }) {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const errorMessages = {
-    '404': t('pageNotFound'),
-    '403': t('unauthorized'),
-    '500': t('serverError'),
+    404: "Page Not Found",
+    403: "Unauthorized Access",
+    500: "Internal Server Error",
   };
 
   return (
@@ -24,7 +22,7 @@ export default function Error({ code = '404', message }) {
           onClick={() => navigate(-1)}
           className="mt-8 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90"
         >
-          {t('goBack')}
+          Go Back
         </button>
       </div>
     </div>
