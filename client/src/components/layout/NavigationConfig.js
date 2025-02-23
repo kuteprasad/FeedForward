@@ -33,6 +33,7 @@ export const getNavbarItems = (user) => [
       { name: "Profile", href: "/donor/profile" },
       { name: "Notifications", href: "/donor/notifications" },
       { name: "History", href: "/donor/history"},
-      {name: "My Donations", href: "/donor/Mydonations"}
+      {name: "My Donations", href: "/donor/Mydonations"},
+      {name: "Waste Disposal", href: "/donor/wastedisposal"}
     ];
   };
