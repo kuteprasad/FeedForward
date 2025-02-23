@@ -9,7 +9,7 @@ import notificationRoutes from './routes/notification.routes.js'
 import http from 'http';
 import { Server } from 'socket.io';
 
-
+import uploadRoutes from "./routes/upload.routes.js";
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies
 app.use('/api/auth', authRoutes);
 app.use('/api/post',postRoutes);
 app.use('/api/notifications',notificationRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
