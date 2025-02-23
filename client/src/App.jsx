@@ -28,6 +28,7 @@ import NgoRequestBox from "./components/dashboard/admin/NgoRequestBox.jsx";
 import NgoDashboard from "./components/dashboard/ngo/NgoDashboard.jsx";
 import NgoVerificationForm from "./components/dashboard/ngo/NgoVerificationForm.jsx";
 import FoodTruckSimulation from "./components/Dummy-pages/FoodTruckSimulation.jsx";
+import Analytics from "./components/Dummy-pages/Analytics.jsx";
 
 import Profile from "./components/pages/Profile.jsx";
 function App() {
@@ -65,6 +66,10 @@ function App() {
 						path="/coldstore"
 						element={<FoodTruckSimulation />}
 					/>
+			<Route
+						path="/analytics"
+						element={<Analytics />}
+			/>	
 				<Route
 					path="/"
 					element={
