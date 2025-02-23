@@ -27,6 +27,7 @@ import Profile from "./components/common/profile.jsx";
 import NgoRequestBox from "./components/dashboard/admin/NgoRequestBox.jsx";
 import NgoDashboard from "./components/dashboard/ngo/NgoDashboard.jsx";
 import NgoVerificationForm from "./components/dashboard/ngo/NgoVerificationForm.jsx";
+import FoodTruckSimulation from "./components/Dummy-pages/FoodTruckSimulation.jsx";
 
 function App() {
 	const { token, user } = useSelector((state) => state.auth);
@@ -59,6 +60,10 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
+			<Route
+						path="/coldstore"
+						element={<FoodTruckSimulation />}
+					/>
 				<Route
 					path="/"
 					element={
@@ -205,6 +210,8 @@ function App() {
 						path="home"
 						element={<HomePage />}
 					/>
+					
+
 
 					{/* Common routes for all users */}
 					{/* <Route path="about" element={<About />} />

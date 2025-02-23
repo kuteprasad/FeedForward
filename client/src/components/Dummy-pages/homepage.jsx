@@ -2,8 +2,16 @@ import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Navbar from '../layout/Navbar';
 import heroImage from '../assets/hero-image.png'; // Make sure to add your hero image
+import FoodTruckSimulation from './FoodTruckSimulation';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export const HomePage = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleFindFoodAssistanceClick = () => {
+    navigate('/coldstore'); // Navigate to /common/coldstore
+  };
+
   return (
     <div className="min-h-screen bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] text-[var(--text-light)] dark:text-[var(--text-dark)] w-full">
       <Navbar />
@@ -31,7 +39,10 @@ export const HomePage = () => {
                 <button className="px-8 py-4 rounded-full font-semibold text-lg bg-[var(--cta-bg-light)] dark:bg-[var(--cta-bg-dark)] text-[var(--cta-text-light)] dark:text-[var(--cta-text-dark)] border border-[var(--border-light)] dark:border-[var(--border-dark)] hover:bg-[var(--primary-teal)] hover:text-white transition-all">
                   Donate Surplus Food
                 </button>
-                <button className="px-8 py-4 rounded-full font-semibold text-lg bg-[var(--cta-bg-light)] dark:bg-[var(--cta-bg-dark)] text-[var(--cta-text-light)] dark:text-[var(--cta-text-dark)] border border-[var(--border-light)] dark:border-[var(--border-dark)] hover:bg-[var(--primary-teal)] hover:text-white transition-all">
+                <button
+                  className="px-8 py-4 rounded-full font-semibold text-lg bg-[var(--cta-bg-light)] dark:bg-[var(--cta-bg-dark)] text-[var(--cta-text-light)] dark:text-[var(--cta-text-dark)] border border-[var(--border-light)] dark:border-[var(--border-dark)] hover:bg-[var(--primary-teal)] hover:text-white transition-all"
+                  onClick={handleFindFoodAssistanceClick} // Add onClick handler
+                >
                   Find Food Assistance
                 </button>
               </div>
@@ -74,6 +85,7 @@ export const HomePage = () => {
                 </button>
               </div>
             </div>
+            {/* <FoodTruckSimulation /> */}
             <div>
               <h4 className="text-xl font-semibold mb-6">Follow Us</h4>
               <div className="flex gap-6">
