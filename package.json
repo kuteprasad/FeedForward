@@ -7,7 +7,9 @@
     "client": "cd client && npm run dev",
     "server": "cd server && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install": "npm install && cd client && npm install && cd ../server && npm install",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+   "install": "npm run install && npm run install-server && npm run install-client",
     "remove": "cd client && rm -rf node_modules "
   },
   "repository": {
@@ -23,6 +25,9 @@
   "homepage": "https://github.com/abhijeet113/innovateyou#readme",
   "description": "",
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "cloudinary": "^2.5.1",
+    "concurrently": "^9.1.2",
+    "multer": "^1.4.5-lts.1",
+    "sharp": "^0.33.5"
   }
 }
