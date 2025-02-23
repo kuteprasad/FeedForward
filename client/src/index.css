@@ -5,83 +5,81 @@
 
 /* Light Theme (default) */
 :root {
-  /* Core colors */
-  --primary-teal: #a4efe0;
-  --accent-orange: #E67E22;
-  --bg-light: #FFFFFF;
-  --text-light: #1A1A1A;
-  --gray-light: #F9F5EC;
-  --cta-bg-light: rgba(26, 188, 156, 0.2);
-  --cta-text-light: #1A1A1A;
-  --card-bg-light: rgba(40, 196, 181, 0.2);
-  --border-light: #D1D5DB;
-  --section-bg-light: rgba(26, 188, 156, 0.1);
+	/* Core colors */
+	--primary-teal: #268b77;
+	--accent-orange: #e67e22;
+	--bg: #ffffff;
+	--text: #1a1a1a;
+	--gray: #f9f5ec;
+	--cta-bg: rgba(26, 188, 156, 0.2);
+	--cta-text: #1a1a1a;
+	--card-bg: rgba(40, 196, 181, 0.2);
+	--border: #d1d5db;
+	--section-bg: rgba(26, 188, 156, 0.1);
 
-  --primary: #f2f8ff;
-  --background: #ffffff;
-  --text: #1f2937;
-  --border: #e5e7eb;
-  --accent: #f3f4f6;
+	--primary: #f2f8ff;
+	
+	
+	--border: #e5e7eb;
+	--accent: #000206;
 
-  /* Component colors */
-  --navbar-bg: #ffffff;
-  --navbar-text: #1f2937;
-  
-  /* Form elements */
-  --input-bg: #ffffff;
-  --input-text: #1f2937;
-  --input-border: #d1d5db;
-  --input-focus: #1a73e8;
+	/* Component colors */
+	--navbar-bg: #ffffff;
+	--navbar-text: #1f2937;
 
-  /* Buttons */
-  --btn-primary-bg: #1a73e8;
-  --btn-primary-text: #ffffff;
-  --btn-primary-hover: #1557b0;
-  
-  --btn-secondary-bg: #f3f4f6;
-  --btn-secondary-text: #1f2937;
-  --btn-secondary-hover: #e5e7eb;
+	/* Form elements */
+	--input-bg: #ffffff;
+	--input-text: #1f2937;
+	--input-border: #d1d5db;
+	--input-focus: #1a73e8;
+
+	/* Buttons */
+	--btn-primary-bg: #1a73e8;
+	--btn-primary-text: #ffffff;
+	--btn-primary-hover: #1557b0;
+
+	--btn-secondary-bg: #f3f4f6;
+	--btn-secondary-text: #1f2937;
+	--btn-secondary-hover: #e5e7eb;
 }
+
 
 /* Dark Theme */
-[data-theme='dark'] {
-  
-  --primary-teal: #16A085;
-	--accent-orange: #D35400;
-	--bg-dark: #121212;
-	--text-dark: #EAEAEA;
-	--gray-dark: #1E1E1E;
-	--cta-bg-dark: rgba(22, 160, 133, 0.2);
-	--cta-text-dark: #EAEAEA;
-	--card-bg-dark: rgba(40, 196, 181, 0.3);
-	--border-dark: #374151;
-	--section-bg-dark: rgba(22, 160, 133, 0.15)
-  
-  /* Core colors */
-  --primary: #60a5fa;
-  --background: #1f2937;
-  --text: #f3f4f6;
-  --border: #374151;
-  --accent: #374151;
+.dark {
+	/* Core colors */
+	--primary-teal: #0d9488;
+	--accent-orange: #ff8c42;
+	--bg: #0f172a;
+	--text: #e5e7eb;
+	--gray: #1e293b;
+	--cta-bg: rgba(13, 148, 136, 0.2);
+	--cta-text: #e5e7eb;
+	--card-bg: rgba(13, 148, 136, 0.3);
+	--border: #334155;
+	--section-bg: rgba(13, 148, 136, 0.15);
 
-  /* Component colors */
-  --navbar-bg: #111827;
-  --navbar-text: #f3f4f6;
+	/* Core colors */
+	--primary: #38bdf8;
+	
+	--border: #334155;
+	--accent: #1e293b;
 
-  /* Form elements */
-  --input-bg: #374151;
-  --input-text: #f3f4f6;
-  --input-border: #4b5563;
-  --input-focus: #60a5fa;
+	/* Component colors */
+	--navbar-bg: #1e293b;
+	--navbar-text: #e5e7eb;
 
-  /* Buttons */
-  --btn-primary-bg: #60a5fa;
-  --btn-primary-text: #ffffff;
-  --btn-primary-hover: #3b82f6;
+	/* Form elements */
+	--input-bg: #1e293b;
+	--input-text: #e5e7eb;
+	--input-border: #64748b;
+	--input-focus: #38bdf8;
 
-  --btn-secondary-bg: #374151;
-  --btn-secondary-text: #f3f4f6;
-  --btn-secondary-hover: #4b5563;
+	/* Buttons */
+	--btn-primary-bg: #38bdf8;
+	--btn-primary-text: #ffffff;
+	--btn-primary-hover: #0ea5e9;
+
+	--btn-secondary-bg: #1e293b;
+	--btn-secondary-text: #e5e7eb;
+	--btn-secondary-hover: #334155;
 }
-
-

@@ -54,7 +54,7 @@ const NgoVerificationForm = ({ onClose }) => {
 	};
 
 	return (
-		<div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+		<div className="p-6 bg-[var(--primary)] rounded shadow">
 			<h2 className="text-xl font-bold mb-4">NGO Verification Request</h2>
 			<FormComponent onSubmit={handleSubmit}>
 				<div className="mb-4">

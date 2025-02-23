@@ -52,30 +52,7 @@ const userSchema = new mongoose.Schema(
 // Create User model
 const User = mongoose.model("User", userSchema);
 
-// Insert initial user
-const insertUsers = async () => {
-	try {
-		const users = [
-			{
-				email: "pass1@gmail.com",
-				username: "user00",
-				mobileNo: "1111111111",
-				role: "ngo",
-				password:
-					"$2b$12$pHhkZsb7uzPixmEVpuXHFesVQucpPitToqZq7W.Yq1hPugEDukWnO", // already hashed password
-				address: "Bhalekar Chawl, Erandwane, Pune, Maharashtra 411004",
-				latitude: 18.5094,
-				longitude: 73.8326,
-				isVerifiedNgo: false,
-			},
-		];
 
-		const result = await User.insertMany(users);
-		console.log("Users inserted:", result);
-	} catch (err) {
-		console.error("Error inserting users:", err);
-	}
-};
 
 // Insert another user with hashed password ("pass@123")
 const insertAnotherUser = async () => {
@@ -85,13 +62,13 @@ const insertAnotherUser = async () => {
 		const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
 		const newUser = {
-			email: "pass2@gmail.com",
-			username: "user01",
+			email: "tanmayjadhav112@gmail.com",
+			username: "tanmay112",
 			mobileNo: "2222222222",
 			role: "ngo",
 			password: hashedPassword,
 			address: "Some Address, Pune, Maharashtra",
-			latitude: 18.5204,
+			latitude: 45.5204,
 			longitude: 73.8567,
 			isVerifiedNgo: false,
 		};
@@ -105,7 +82,7 @@ const insertAnotherUser = async () => {
 
 // Run both insertions sequentially then close the connection
 const runInsertions = async () => {
-	await insertUsers();
+	// await insertUsers();
 	await insertAnotherUser();
 	mongoose.connection.close();
 };

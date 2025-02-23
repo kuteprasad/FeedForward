@@ -31,8 +31,8 @@ const cardVariants = {
 
 const ImpactMetrics = () => {
   return (
-    <div className="py-20 bg-[var(--primary-bg)] dark:bg-[var(--primary-bg-dark)] text-center transition-colors duration-300">
-      <h2 className="text-4xl font-bold mb-10 text-[var(--text-light)] dark:text-[var(--text-dark)]">
+    <div className="py-20 bg-[var(--bg)] dark:bg-[var(--bg)] text-center transition-colors duration-300">
+      <h2 className="text-4xl font-bold mb-10 text-[var(--text)] dark:text-[var(--text)]">
         Our Impact
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-10 px-6">
@@ -64,7 +64,7 @@ const ImpactMetrics = () => {
         ].map((metric, index) => (
           <motion.div
             key={index}
-            className="p-6 bg-[var(--card-bg-light)] dark:bg-[var(--card-bg-dark)] 
+            className="p-6 bg-[var(--card-bg)] 
                      rounded-xl shadow-lg transition-colors duration-300"
             variants={cardVariants}
             initial="hidden"
@@ -73,10 +73,10 @@ const ImpactMetrics = () => {
             whileHover={{ scale: 1.05, rotate: 1 }}
           >
             <metric.icon className="text-4xl text-[var(--primary-teal)] mb-4 mx-auto" />
-            <h3 className="text-xl font-semibold text-[var(--text-light)] dark:text-[var(--text-dark)]">
+            <h3 className="text-xl font-semibold text-[var(--text)] dark:text-[var(--text)]">
               {metric.title}
             </h3>
-            <p className="text-[var(--text-light)] dark:text-[var(--text-dark)] opacity-80 mt-2">
+            <p className="text-[var(--text)] dark:text-[var(--text)] opacity-80 mt-2">
               <CountUp end={metric.value} suffix={metric.suffix} />
             </p>
           </motion.div>
