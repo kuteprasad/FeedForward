@@ -78,7 +78,6 @@ export default function MyDonations() {
                 {new Date(donation.createdAt).toLocaleDateString()}
               </span>
             </div>
-
             {/* Food Items */}
             <div className="space-y-2 mb-4">
               <h3 className="font-semibold text-[var(--text)]">Food Items:</h3>
@@ -94,13 +93,20 @@ export default function MyDonations() {
               ))}
             </div>
 
-            {/* Location */}
             <div className="mb-4">
               <h3 className="font-semibold text-[var(--text)]">
                 Pickup Location:
               </h3>
               <p className="text-sm text-[var(--text-secondary)]">
-                📍 {donation?.location?.address}
+                📍 {donation?.locationDonor?.address || "Location not set"}
+              </p>
+            </div>
+            <div className="mb-4">
+              <h3 className="font-semibold text-[var(--text)]">
+                Drop Location:
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)]">
+                📍 {donation?.locationNgo?.address || "Location not set"}
               </p>
             </div>
 
@@ -117,7 +123,7 @@ export default function MyDonations() {
                       className="flex justify-between items-center"
                     >
                       <span className="text-sm text-[var(--text)]">
-                        NGO #{ngoId.slice(-4)}
+                        NGO : {donation.ngoName}
                       </span>
                       {donation.status === "PENDING" && (
                         <div className="flex gap-2">
@@ -150,7 +156,6 @@ export default function MyDonations() {
                 </p>
               )}
             </div>
-
             {/* Status Actions */}
             {renderStatusActions(donation)}
           </div>

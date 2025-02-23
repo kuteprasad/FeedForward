@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 export const NotificationType = {
     NEWPOST: 'NEWPOST',
     MESSAGE: 'MESSAGE',
+    STATUS_UPDATE: 'STATUS_UPDATE' 
 };
 
 // Define the schema for Notification

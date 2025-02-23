@@ -5,13 +5,15 @@ import { donorService } from "../../../services/donor.service";
 
 export const useMyDonations = () => {
   const [donations, setDonations] = useState([]);
-  const { notifications } = useSelector((state) => state.websocket);
   const { user } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state.websocket);
 
+  // Fetch initial donations
   useEffect(() => {
     fetchDonations();
   }, []);
 
+  // Handle real-time updates
   useEffect(() => {
     const handleNotifications = async () => {
       for (const notification of notifications) {
@@ -27,12 +29,26 @@ export const useMyDonations = () => {
                   : donation
               )
             );
+
+            // Show toast based on action
+            if (notification.action) {
+              switch (notification.action) {
+                case "PACKED":
+                  toast.success("NGO has packed the order");
+                  break;
+                case "TRANSIT":
+                  toast.success("Order is in transit");
+                  break;
+              }
+            }
           }
         }
       }
     };
 
-    handleNotifications();
+    if (notifications.length > 0) {
+      handleNotifications();
+    }
   }, [notifications]);
 
   const fetchDonations = async () => {
@@ -48,17 +64,13 @@ export const useMyDonations = () => {
 
   const handleAcceptRequest = async (postId, ngoId) => {
     try {
-    console.log("handle accept request called   ");
       const response = await donorService.updatePostStatus(
         postId,
         ngoId,
-        "ACCEPTED"
+        "ACCEPT"
       );
-      console.log("response of handle accept: ", response);
-      console.log("response of handle accept: ", response.success);
-      
       if (response.success) {
-        toast.success("Request accepted successfully");
+        toast.success("Request accepted");
         setDonations((prev) =>
           prev.map((donation) =>
             donation._id === postId ? response.data : donation
