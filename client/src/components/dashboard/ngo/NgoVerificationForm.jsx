@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { FormInput } from "../../basic/FormInput";
+
+import { FormComponent } from "../../basic/FormComponent";
+
+import { Button } from "../../basic/Button";
+import { Label } from "../../basic/Label";
 
 const NgoVerificationForm = ({ onClose }) => {
 	const [image, setImage] = useState(null);
@@ -50,10 +56,10 @@ const NgoVerificationForm = ({ onClose }) => {
 	return (
 		<div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
 			<h2 className="text-xl font-bold mb-4">NGO Verification Request</h2>
-			<form onSubmit={handleSubmit}>
+			<FormComponent onSubmit={handleSubmit}>
 				<div className="mb-4">
-					<label className="block mb-2">Upload Certificate:</label>
-					<input
+					<Label className="block mb-2">Upload Certificate:</Label>
+					<FormInput
 						type="file"
 						accept="image/*"
 						onChange={handleImageChange}
@@ -63,7 +69,7 @@ const NgoVerificationForm = ({ onClose }) => {
 				</div>
 				<div className="mb-4">
 					<label className="block mb-2">Registration Number:</label>
-					<input
+					<FormInput
 						type="text"
 						value={registrationNumber}
 						onChange={(e) => setRegistrationNumber(e.target.value)}
@@ -71,13 +77,13 @@ const NgoVerificationForm = ({ onClose }) => {
 						required
 					/>
 				</div>
-				<button
+				<Button
 					type="submit"
 					className="px-4 py-2 bg-blue-500 text-white rounded-lg"
 				>
 					Submit Request
-				</button>
-			</form>
+				</Button>
+			</FormComponent>
 			{message && <p className="mt-4 text-center">{message}</p>}
 		</div>
 	);

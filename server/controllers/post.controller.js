@@ -410,11 +410,11 @@ export const updatestatus = async (req, res) => {
     console.log(existing);
     if (existing) {
       try {
-        const updatedPost = await Order.updateOne(
+        const updatedPost = await Order.findOneAndUpdate(
           { _id: postId },
-          { $set: {status:action,ngoId:ngoId} },
+          { $set: { status: action, ngoId: ngoId } },
           { new: true }
-        );
+        ).exec();
         console.log("updated post is ", updatedPost);
         const notifi = {
           type: "NEWPOST",
