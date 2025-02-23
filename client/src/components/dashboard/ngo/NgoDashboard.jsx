@@ -23,6 +23,59 @@ export default function NgoDashboard() {
     setEditingPost(null);
   };
 
+  const renderActionButtons = (donation) => {
+    if (donation.status === "ACCEPTED") {
+      if (donation.ngoId === user.id) {
+        // This NGO's request was accepted
+        return (
+          <div className="space-y-4">
+            {!donation.deliveryPerson && donation.deliveryBy === "NGO" && (
+              <Button
+                onClick={() => setEditingPost(donation._id)}
+                className="w-full bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)]"
+              >
+                Add Delivery Details
+              </Button>
+            )}
+            <p className="text-center text-sm text-[var(--text-secondary)]">
+              {donation.deliveryBy === "NGO"
+                ? "You will deliver this donation"
+                : "Donor will deliver this donation"}
+            </p>
+          </div>
+        );
+      } else {
+        // Another NGO's request was accepted
+        return (
+          <p className="text-center text-sm text-[var(--text-secondary)]">
+            This donation has been accepted by another NGO
+          </p>
+        );
+      }
+    }
+
+    // Pending state - show request/decline buttons
+    return (
+      <div className="flex gap-2">
+        <Button
+          onClick={() => handleMakeRequest(donation._id)}
+          disabled={donation.requestedBy?.includes(user.id)}
+          className="flex-1 bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
+        >
+          {donation.requestedBy?.includes(user.id)
+            ? "Request Sent"
+            : "Make Request"}
+        </Button>
+        <Button
+          onClick={() => handleDeclineRequest(donation._id)}
+          className="flex-1 bg-[var(--btn-danger-bg)] text-[var(--btn-danger-text)]"
+        >
+          Decline
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 text-[var(--text)]">
@@ -62,104 +115,90 @@ export default function NgoDashboard() {
               ))}
             </div>
 
-            <p className="text-sm text-[var(--text-secondary)] mb-4">
-              📍 {donation?.location?.address}
-            </p>
+            <div className="mb-4">
+              <h3 className="font-semibold text-[var(--text)]">
+                Pickup Location:
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)]">
+                📍 {donation?.locationDonor?.address}
+              </p>
+            </div>
+            <div className="mb-4">
+              <h3 className="font-semibold text-[var(--text)]">
+                Drop Location:
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)]">
+                📍 {donation?.locationNgo?.address}
+              </p>
+            </div>
 
-            {donation.status === "ACCEPTED" && donation.ngoId === user.id ? (
-              <>
-                {editingPost === donation._id ? (
-                  <div className="space-y-4">
+            {editingPost === donation._id ? (
+              <div className="space-y-4">
+                <FormInput
+                  placeholder="NGO Address"
+                  value={ngoDetails.location.address}
+                  onChange={(e) =>
+                    setNgoDetails((prev) => ({
+                      ...prev,
+                      location: {
+                        ...prev.location,
+                        address: e.target.value,
+                      },
+                    }))
+                  }
+                />
+                {donation.deliveryBy === "NGO" && !donation.deliveryPerson && (
+                  <>
                     <FormInput
-                      placeholder="NGO Address"
-                      value={ngoDetails.location.address}
+                      placeholder="Delivery Person Name"
+                      value={ngoDetails.deliveryPerson.name}
                       onChange={(e) =>
                         setNgoDetails((prev) => ({
                           ...prev,
-                          location: {
-                            ...prev.location,
-                            address: e.target.value,
+                          deliveryPerson: {
+                            ...prev.deliveryPerson,
+                            name: e.target.value,
                           },
                         }))
                       }
                     />
-                    {donation.deliveryBy === "NGO" && (
-                      <>
-                        <FormInput
-                          placeholder="Delivery Person Name"
-                          value={ngoDetails.deliveryPerson.name}
-                          onChange={(e) =>
-                            setNgoDetails((prev) => ({
-                              ...prev,
-                              deliveryPerson: {
-                                ...prev.deliveryPerson,
-                                name: e.target.value,
-                              },
-                            }))
-                          }
-                        />
-                        <FormInput
-                          placeholder="Mobile Number"
-                          value={ngoDetails.deliveryPerson.mobNo}
-                          onChange={(e) =>
-                            setNgoDetails((prev) => ({
-                              ...prev,
-                              deliveryPerson: {
-                                ...prev.deliveryPerson,
-                                mobNo: e.target.value,
-                              },
-                            }))
-                          }
-                        />
-                        <FormInput
-                          placeholder="Vehicle Number"
-                          value={ngoDetails.deliveryPerson.vehicleNo}
-                          onChange={(e) =>
-                            setNgoDetails((prev) => ({
-                              ...prev,
-                              deliveryPerson: {
-                                ...prev.deliveryPerson,
-                                vehicleNo: e.target.value,
-                              },
-                            }))
-                          }
-                        />
-                      </>
-                    )}
-                    <Button
-                      onClick={() => handleUpdateDetails(donation._id)}
-                      className="w-full bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
-                    >
-                      Update Details
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    onClick={() => setEditingPost(donation._id)}
-                    className="w-full bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)]"
-                  >
-                    Edit Details
-                  </Button>
+                    <FormInput
+                      placeholder="Mobile Number"
+                      value={ngoDetails.deliveryPerson.mobNo}
+                      onChange={(e) =>
+                        setNgoDetails((prev) => ({
+                          ...prev,
+                          deliveryPerson: {
+                            ...prev.deliveryPerson,
+                            mobNo: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                    <FormInput
+                      placeholder="Vehicle Number"
+                      value={ngoDetails.deliveryPerson.vehicleNo}
+                      onChange={(e) =>
+                        setNgoDetails((prev) => ({
+                          ...prev,
+                          deliveryPerson: {
+                            ...prev.deliveryPerson,
+                            vehicleNo: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                  </>
                 )}
-              </>
-            ) : (
-              <div className="flex gap-2">
                 <Button
-                  onClick={() => handleMakeRequest(donation._id)}
-                  disabled={donation.requestedBy?.includes(user.id)}
-                  className="flex-1 bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
+                  onClick={() => handleUpdateDetails(donation._id)}
+                  className="w-full bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]"
                 >
-                  {donation.requestedBy?.includes(user.id)
-                    ? "Request Sent"
-                    : "Make Request"}
-                </Button>
-                <Button
-                  onClick={() => handleDeclineRequest(donation._id)}
-                  className="flex-1 bg-[var(--btn-danger-bg)] text-[var(--btn-danger-text)]"
-                >
-                  Decline
+                  Update Details
                 </Button>
               </div>
+            ) : (
+              renderActionButtons(donation)
             )}
           </div>
         ))}

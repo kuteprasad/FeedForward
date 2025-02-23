@@ -26,7 +26,7 @@ export const donorService = {
 
   getPostById: async (postId) => {
     try {
-      const response = await api.get(`/post/`, {
+      const response = await api.get(`/post/getpost`, {
         params: { id: postId },
       });
       return response.data;
