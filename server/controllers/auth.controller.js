@@ -188,6 +188,7 @@ export const getNonVerifiedNgos = async (req, res) => {
 		const nonVerifiedNgos = await User.find({
 			isVerifiedNgo: false,
 			role: "ngo",
+			certificate: { $exists: true, $ne: null },
 		}).select("_id email username mobileNo address certificate");
 
 		res.status(200).json({

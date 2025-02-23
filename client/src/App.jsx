@@ -29,6 +29,8 @@ import NgoDashboard from "./components/dashboard/ngo/NgoDashboard.jsx";
 import NgoVerificationForm from "./components/dashboard/ngo/NgoVerificationForm.jsx";
 
 import Profile from "./components/pages/Profile.jsx";
+import DisposalPage from "./components/Dummy-pages/DisposalPage.jsx";
+import ColdStorage from "./components/Dummy-pages/ColdStorage.jsx";
 function App() {
 	const { token, user } = useSelector((state) => state.auth);
 	const { mode } = useSelector((state) => state.theme);
@@ -104,13 +106,15 @@ function App() {
 						element={<AdminDashboard />}
 					/>
 					<Route
-						path="ngoList"
+						path="confirmVerifications"
 						element={<NgoRequestBox />}
 					/>
 					<Route
 						path="profile"
 						element={<Profile />}
 					/>
+
+					
 				</Route>
 
 				<Route
@@ -212,7 +216,14 @@ function App() {
 						path="home"
 						element={<HomePage />}
 					/>
-
+					<Route
+						path="disposed"
+						element={<DisposalPage />}
+					/>
+					<Route
+						path="coldStorage"
+						element={<ColdStorage />}
+					/>
 					{/* Common routes for all users */}
 					{/* <Route path="about" element={<About />} />
               <Route path="contact-us" element={<ContactUs />} />

@@ -21,7 +21,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="py-20 bg-[var(--section-bg-light)] dark:bg-[var(--section-bg-dark)] text-center transition-colors duration-300">
+    <div className="py-20 bg-[var(--primary)]  text-center transition-colors duration-300">
       <h2 className="text-4xl font-bold mb-10 text-[var(--text-light)] dark:text-[var(--text-dark)]">
         How It Works
       </h2>
@@ -29,16 +29,16 @@ const HowItWorks = () => {
         {steps.map((step, index) => (
           <motion.div
             key={index}
-            className="bg-[var(--card-bg-light)] dark:bg-[var(--card-bg-dark)] 
+            className="bg-[var(--card-bg)]
                      p-6 rounded-xl shadow-lg text-center w-80 
                      transition-colors duration-300"
             whileHover={{ scale: 1.05 }}
           >
             <step.icon className="text-4xl text-[var(--primary-teal)] mb-4 mx-auto" />
-            <h3 className="text-xl font-semibold text-[var(--text-light)] dark:text-[var(--text-dark)]">
+            <h3 className="text-xl font-semibold text-[var(--text)] ">
               {step.title}
             </h3>
-            <p className="text-[var(--text-light)] dark:text-[var(--text-dark)] opacity-80 mt-2">
+            <p className="text-[var(--text)] opacity-80 mt-2">
               {step.description}
             </p>
           </motion.div>

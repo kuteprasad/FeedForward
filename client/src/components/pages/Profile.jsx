@@ -109,7 +109,7 @@ const Profile = () => {
 	}
 
 	return (
-		<div className="max-w-3xl mx-auto p-6 bg-white border border-gray-200 shadow-lg rounded-lg">
+		<div className=" mx-auto  bg-white border border-gray-200 shadow-lg rounded-lg p-6">
 			{/* Profile Header */}
 			<section className="p-6 bg-[var(--primary)]  rounded shadow">
 				<h3 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 border-b pb-2">
@@ -199,15 +199,18 @@ const Profile = () => {
 					</p>
 				</div>
 			</section>
-			<section>{profile?.isVerifiedNgo && <NgoVerificationForm />}</section>
-			<div className="flex justify-between items-center mt-6">
-				<Button
-					onClick={() => setEditing(true)}
-					className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-				>
-					Edit Profile
-				</Button>
-			</div>
+
+			<section>
+				{profile?.isVerifiedNgo && <NgoVerificationForm />}
+				<div className="flex justify-between items-center mt-6">
+					<Button
+						onClick={() => setEditing(true)}
+						className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+					>
+						Edit Profile
+					</Button>
+				</div>
+			</section>
 
 			{/* Edit Profile Modal */}
 			{editing && (

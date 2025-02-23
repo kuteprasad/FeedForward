@@ -10,7 +10,7 @@ const DonorNgoSection = () => {
       features: [
         "Quick and easy listing process",
         "Real-time tracking of donations",
-        "Tax deduction receipts",
+  
         "Impact metrics dashboard"
       ]
     },
@@ -22,7 +22,7 @@ const DonorNgoSection = () => {
         "Real-time food availability alerts",
         "Streamlined collection process",
         "Distribution tracking",
-        "Beneficiary management"
+
       ]
     }
   ];

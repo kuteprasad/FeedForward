@@ -42,9 +42,9 @@ const VisionMission = () => {
   ];
 
   return (
-    <div className="py-20 bg-[var(--section-bg-light)] dark:bg-[var(--section-bg-dark)] text-center transition-colors duration-300">
+    <div className="py-20 bg-[var(--bg)] text-center transition-colors duration-300">
       <motion.h2
-        className="text-4xl font-bold mb-12 text-[var(--text-light)] dark:text-[var(--text-dark)]"
+        className="text-4xl font-bold mb-12 text-[var(--text)] dark:text-[var(--text)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -62,22 +62,22 @@ const VisionMission = () => {
         {cards.map((card, index) => (
           <motion.div
             key={index}
-            className="p-8 bg-[var(--card-bg-light)] dark:bg-[var(--card-bg-dark)] 
-                     rounded-xl shadow-lg border border-[var(--border-light)] 
-                     dark:border-[var(--border-dark)] transition-colors duration-300"
+            className="p-8 bg-[var(--card-bg)] 
+                     rounded-xl shadow-lg border border-[var(--border)] 
+                    transition-colors duration-300"
             variants={cardVariants}
             whileHover={{ scale: 1.05, rotate: index === 0 ? 1 : -1 }}
           >
             <motion.h3
-              className="text-2xl font-semibold mb-2 text-[var(--text-light)] 
-                       dark:text-[var(--text-dark)]"
+              className="text-2xl font-semibold mb-2 text-[var(--text)] 
+                       dark:text-[var(--text)]"
               variants={textVariants}
             >
               {card.title}
             </motion.h3>
             
             <motion.p
-              className="text-[var(--text-light)] dark:text-[var(--text-dark)] 
+              className="text-[var(--text)] dark:text-[var(--text)] 
                        opacity-80 mb-4"
               variants={textVariants}
             >
@@ -91,8 +91,8 @@ const VisionMission = () => {
               {card.items.map((item, idx) => (
                 <li 
                   key={idx}
-                  className="flex items-center justify-center text-[var(--text-light)] 
-                           dark:text-[var(--text-dark)] opacity-90"
+                  className="flex items-center justify-center text-[var(--text)] 
+                           dark:text-[var(--text)] opacity-90"
                 >
                   <span className="mr-2 text-xl">{item.emoji}</span>
                   <span>{item.text}</span>
