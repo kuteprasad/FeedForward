@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pillow
+requests
+pymongo
+twilio
+torch
+torchvision
+groq
+python-dotenv
+bson
