@@ -18,6 +18,7 @@ const formatUserResponse = (user) => {
 		email: user.email,
 		username: user.username,
 		role: user.role,
+		isVerifiedNgo: user.isVerifiedNgo,
 		// Add additional fields here if needed
 	};
 };

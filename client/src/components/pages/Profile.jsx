@@ -10,6 +10,7 @@ import {
 	FaMapMarkerAlt,
 	FaRoad,
 	FaCamera,
+	FaTimesCircle,
 } from "react-icons/fa";
 import { profileService } from "../../services/profile.service";
 import { useSelector } from "react-redux";
@@ -29,7 +30,7 @@ const Profile = () => {
 	const [profilePic, setProfilePic] = useState(null);
 	const { user } = useSelector((state) => state.auth);
 
-	const isVerifiedNgo = true;
+	// const isVerifiedNgo = true;
 	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchProfileData = async () => {
@@ -41,10 +42,12 @@ const Profile = () => {
 					setProfile(response.data.user);
 					setFormData(response.data.user);
 					setProfilePic(response.data.user.photo || "/default-profile.png");
-					console.log(profile);
+					console.log(user);
 				} else {
 					setError("Failed to fetch profile data");
 				}
+
+				console.log(user);
 			} catch (err) {
 				setError(err.message);
 			} finally {
@@ -109,7 +112,7 @@ const Profile = () => {
 	}
 
 	return (
-		<div className="max-w-3xl mx-auto p-6 bg-white border border-gray-200 shadow-lg rounded-lg">
+		<div className=" mx-auto  bg-white border border-gray-200 shadow-lg rounded-lg p-6">
 			{/* Profile Header */}
 			<section className="p-6 bg-[var(--primary)]  rounded shadow">
 				<h3 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 border-b pb-2">
@@ -199,15 +202,36 @@ const Profile = () => {
 					</p>
 				</div>
 			</section>
-			<section>{profile?.isVerifiedNgo && <NgoVerificationForm />}</section>
-			<div className="flex justify-between items-center mt-6">
-				<Button
-					onClick={() => setEditing(true)}
-					className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-				>
-					Edit Profile
-				</Button>
-			</div>
+
+			<section className="p-6 bg-[var(--primary)] rounded shadow mt-4">
+				<h3 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 border-b pb-2">
+					<FaIdBadge /> NGO Verification Status
+				</h3>
+				<div className="flex items-center gap-3 mt-4">
+					{profile.isVerifiedNgo ? (
+						<span className="text-green-600 flex items-center gap-2">
+							<FaCheckCircle /> Verified
+						</span>
+					) : (
+						<span className="text-red-600 flex items-center gap-2">
+							<FaTimesCircle /> Not Verified
+						</span>
+					)}
+				</div>
+				{!profile.isVerifiedNgo && <NgoVerificationForm />}
+			</section>
+
+			<section>
+				{/* {profile?.isVerifiedNgo == false && <NgoVerificationForm />} */}
+				<div className="flex justify-between items-center mt-6">
+					<Button
+						onClick={() => setEditing(true)}
+						className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+					>
+						Edit Profile
+					</Button>
+				</div>
+			</section>
 
 			{/* Edit Profile Modal */}
 			{editing && (
