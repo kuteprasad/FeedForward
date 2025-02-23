@@ -35,7 +35,7 @@ export default function Dashboard() {
 				)}
 
 				{/* Main Content */}
-				<main className="flex-1 p-4 md:p-6 md:ml-64 transition-all duration-300 ">
+				<main className="flex-1 p-4 md:p-6 md:ml-10 transition-all duration-300 ">
 					<Outlet />
 				</main>
 			</div>
